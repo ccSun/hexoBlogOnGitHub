@@ -13,7 +13,7 @@ Welcome to [Hexo](http://hexo.io/)! This is your very first post. Check [documen
 	$vi _config.yml
 		deploy:
   		type: git
-  		repository: https://github.com/ccSun/ccsun.github.io.git
+  		repo: https://github.com/ccSun/ccsun.github.io.git
 		branch: master
 	$hexo g
 	$hexo d
