@@ -1,4 +1,7 @@
-title: About Me
-date: 2016-01-22 18:01:07
+title: About
+date: 2016-01-22 18:42:40
 ---
-{% asset_img wechat_me.jpg My Wechat Id : ccsun89%}
+
+![My WechatId is ccSun89.](/images/about_Wechat.jpg)
+
+
