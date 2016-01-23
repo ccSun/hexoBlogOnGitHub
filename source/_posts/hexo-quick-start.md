@@ -1,6 +1,7 @@
-title: hexo-quick-start
+title: Hexo Quick Start
 date: 2016-01-23 15:36:16
-categories: Hexo
+categories: 
+- Hexo
 tags:
 - Hexo
 - Setting
