@@ -35,71 +35,58 @@ CG前缀是Core Graphics框架提供，用于2D渲染。如CGPoint，CGSize。
 
 ###(2). 常用数据类型
 
-* 范围
-cool在"Objective-C is a cool language"中的区间[17,4]    
-(1)NSRange range = {17, 4};    
-(2)NSRange range = NSMakeRange(17,4);     
+1. 范围    
+	cool在"Objective-C is a cool language"中的区间[17,4]    
+	(1)NSRange range = {17, 4};    
+	(2)NSRange range = NSMakeRange(17,4);     
 
-```
-	typedef struct _NSRANGE{
-		unsigned int location;
-		unsigned int length;
-	} NSRange;
-```
-* 几何数据
+		typedef struct _NSRANGE{
+			unsigned int location;
+			unsigned int length;
+		} NSRange;
 
-```
-	CGPoint 	点坐标
-	CGSize		长度宽度
-	CGRect		矩形
-```
+2. 几何数据
 
-* 字符串
+		CGPoint 	点坐标
+		CGSize		长度宽度
+		CGRect		矩形
+3. 字符串
 
-长度
+	**长度**
 
-```
-	NSString *height = [NSString stringWithFormat:@"lenght:%d", 5];	
-	NSUInteger len = [height length]; // length返回准确长度，适用中文，strlen只计算字节数。	
-```
-大小
+		NSString *height = [NSString stringWithFormat:@"lenght:%d", 5];
+		NSUInteger len = [height length]; // length返回准确长度，适用中文，strlen只计算字节数。	
 
-```
-	if(str1 compare: str2 options: NSCaseInsensitiveSearch)
+	**大小**
+
+		if(str1 compare: str2 options: NSCaseInsensitiveSearch)
 		[@"100" compare: @"99"]   NSOrderedAscending
-		[@"100" compare: @"99" options:NSNumericSearch]  NSOrderedDescending        
-```
+		[@"100" compare: @"99" options:NSNumericSearch]  NSOrderedDescending
 
-包含
+	**包含**
+	
+		[filename hasPrefix:@"draft"]
+		[filename hasSuffix:@".rmvb"]
+		NSRange range = [filename rangeOfString:@chapter"]
 
-```
-	[filename hasPrefix:@"draft"]
-	[filename hasSuffix:@".rmvb"]
-	NSRange range = [filename rangeOfString:@chapter"]
-```
+	**可变长度**
 
-可变长度
+		NSMutableString *string = [NSMutableString stringWithCapacity:42]; // 给一个大约的范围
+		[string appendString: @"hello tom god"];
+		[string appendFormat: @"human %d", 39];
+		Range range = [string rangeOfString:@"tom"];
+		range.length++; // eat the space that follows
+		[string deleteCharactersInRange:range]
 
-```
-	NSMutableString *string = [NSMutableString stringWithCapacity:42]; // 给一个大约的范围
-	[string appendString: @"hello tom god"];
-	[string appendFormat: @"human %d", 39];
-	Range range = [string rangeOfString:@"tom"];
-	range.length++; // eat the space that follows
-	[string deleteCharactersInRange:range]
-```
+	**颜色**
 
-* 颜色
+		NSColor *blue = [NSColor blueColor];
+		UIColor *blue = [UIColor blueColor];
 
-```
-	NSColor *blue = [NSColor blueColor];
-	UIColor *blue = [UIColor blueColor];
-```
+	**几何**
 
-＊几何
-
-```
-	// NSArray 只能存OC的对象，不能存C原始类型 int float enum struct
-	NSArray *array = [NSArray arrayWithObjects:@"one",@"two",@"three",nil];
-	NSArray *array = @[@"one", @"two", @"three"];
-```
+		// NSArray 只能存OC的对象，不能存C原始类型 int float enum struct
+		NSArray *array = [NSArray arrayWithObjects:@"one",@"two",@"three",nil];
+		NSArray *array = @[@"one", @"two", @"three"];
+		
+4. 
