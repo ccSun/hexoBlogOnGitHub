@@ -18,7 +18,7 @@ XCode工具的日常操作、错误提示及修正方式。
 4. Esc 显示代码提示菜单
 5. 头文件/.m文件中选中类名， Edit --> Rename 重命名类名
 6. 双击变量名，点击右侧Edit all in scope，重命名变量名
-7. 功能菜单  
+7. 功能菜单    
 	#pragma mark whatever balabalabal
 	
 	#progma mark - 分割线
