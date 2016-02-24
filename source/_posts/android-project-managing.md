@@ -68,8 +68,8 @@ Android Studio项目目录介绍
 6. **main/assets**
 7. **main/res**
 	1. anim	
-	2. drawable
-	3. mipmap
+	2. **drawable** For bitmap files (PNG, JPEG, or GIF), 9-Patch image files, and XML files that describe Drawable shapes or Drawable objects that contain multiple states (normal, pressed, or focused).
+	3. **mipmap** For app launcher icons. 
 	4. color
 	5. layout
 	6. raw
