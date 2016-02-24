@@ -250,20 +250,79 @@ Spring整理
 		xmlns:aop="http://www.springframework.org/schema/context"
 		xsi:schemaLocation="xxxxxxxxxxx   aop  aop/spring-aop-3.0.xsd"
 
-2. 打开aop代理
+2. 打开基于annotation的aop代理
 
-		<aop:apsectj-autoproxy/>
+		<aop:aspectj-autoproxy/>
 3. 创建aop切面
 		
 		@Component("logAspect") // 注入切面类给spring管理
-		@Aspect // 声明这是一个切面类
+		@Aspect // 声明这是一个切面类，Spring通过第三方aspectj实现aop切面
 		public class LogAspect{
 			
+			// 在哪些类里执行
 			// 第一个＊表示任意返回值；add*表示add开头的方法；..表示任意参数
 			@Before("execution(* com.xxxxx.dao.*.add*(..))"
 						  + "|| execution(* com.xxxxx.dao.*.update*(..))")
-			public void logStart{
+			public void logStart(JoinPoint jp){
 				syso("加入日志");
+				// 得到执行对象
+				syso:	jp.getTarget()	
+				// 得到执行的方法
+				syso:	jp.getSignature().getname()	// 
+			}
+			
+			@Before @After 开始、结束执行
+			@After("execution(xxx)")
+			public void logEnd(JoinPoint jp){
+			}
+			
+			@Around("execution(xxxxxx)")
+			public void logAround(ProceedingJoinPoint pjp){
+				
+				// coding 执行程序前执行
+			
+				pjp.process(); // 执行程序
+				
+				// coding 执行完程序后执行
 			}
 		}
 	**@Aspect依赖jar包：aopalliance.jar aspectjrt.jar aspectjweaver.jar,要先导入**
+
+## 5. 基于XML实现AOP代理
+
+1. LogAspect修改
+
+			@Component("logAspect") // 注入切面类给spring管理
+		public class LogAspect{
+			
+			public void logStart(JoinPoint jp){
+				syso("加入日志");
+				// 得到执行对象
+				syso:	jp.getTarget()	
+				// 得到执行的方法
+				syso:	jp.getSignature().getname()	// 
+			}
+			
+			public void logEnd(JoinPoint jp){
+			}
+			
+			public void logAround(ProceedingJoinPoint pjp){
+				
+				// coding 执行程序前执行
+			
+				pjp.process(); // 执行程序
+				
+				// coding 执行完程序后执行
+			}
+		}
+		
+2. 修改beans.xml
+
+		<aop:config>
+			// 定义切面
+			<aop:aspect id="myLogAspect" ref="logAspect">
+				// 通过execution指定在哪些类加入切入点
+				<aop:pointcut id="logPointCut" expression="execution(* xxxx)"/>
+				<aop:before method="logStart" pointcut-ref="logPointCut"/>
+			</aop:apsect>
+		</aop:config>	
