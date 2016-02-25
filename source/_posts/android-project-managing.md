@@ -34,6 +34,18 @@ Android Studio项目目录介绍
 
 1. **build**
 2. **libs**
+	1. Dependencies添加lib，module和本地jar lib；
+	2. Resource conflicts: select the resource from the application, or the library with highest priority, and discard the other resource.
+	3. cant export a library module to a jar file;
+	4. can include a JAR lib;
+	5. can depend on an external JAR lib;
+			
+    			<uses-library   	
+      				android:name="string"   
+      				android:required=["true" | "false"] />
+			
+	6. lib cannot include raw assets;
+	7. lib platform version要等于或低于app version;
 3. **src**
 
 #### src目录分解
