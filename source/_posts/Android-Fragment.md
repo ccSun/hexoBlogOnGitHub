@@ -79,7 +79,7 @@ Each fragment requires a unique identifier that the system can use to restore th
 3. If you ***add multiple changes to the transaction*** (such as another add() or remove()) and call addToBackStack(), ***then all changes applied before you call commit() are added to the back stack as a single transaction and the Back button will reverse them all together***.
 4. If you ***do not call addToBackStack() when you perform a transaction that removes a fragment, then that fragment is destroyed*** when the transaction is committed and the user cannot navigate back to it.
 5. For each fragment transaction, ***you can apply a transition animation, by calling setTransition() before you commit***.
-***Caution:*** You can commit a transaction ***using commit() only prior to the activity saving its state*** (when the user leaves the activity). If you attempt to commit after that point, an exception will be thrown. This is because the state after the commit can be lost if the activity needs to be restored. For situations in which its okay that you lose the commit, use commitAllowingStateLoss().
+***Caution:*** You can commit a transaction ***using commit() only prior to the activity saving its state*** (when the user leaves the activity). If you attempt to commit after that point, an exception will be thrown. This is because the state after the commit can be lost if the activity needs to be restored. ***For situations in which its okay that you lose the commit, use commitAllowingStateLoss()***.
 
 ## 五、 Communicating with Other Fragments
 
