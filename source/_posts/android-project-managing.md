@@ -1,8 +1,9 @@
-title: android-project-managing
+title: Android-Project-Managing
 categories:
-  - android
+  - Android
 tags:
-  - android
+  - Android
+  
 date: 2016-02-24 11:07:14
 ---
 

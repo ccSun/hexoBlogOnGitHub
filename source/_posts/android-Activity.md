@@ -1,9 +1,11 @@
-title: android-Activity
+title: Android-Activity
 categories:
-  - android
+  - Android
 tags:
-  - android
+  - Android
   - Acivity
+  - 内存优化
+  - 内存溢出
 date: 2016-03-11 14:59:37
 ---
 
@@ -85,7 +87,7 @@ onSaveInstanceState() -> onStop()
 
 ## 三、 Leaked Activity
 
-1. Call finish() after startActivity() will lead A activity to a leaked activity.
+1. Call finish() after startActivity() will lead A activity to a leaked activity. // 内存优化 内存溢出
 
 		Intent intent = new Intent(A.this, B.class);
 		MainActivity.this.startActivity(intent);
