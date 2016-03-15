@@ -30,8 +30,7 @@ date: 2016-03-11 17:08:09
 
 When you add a fragment to an activity layout by defining the fragment in the layout XML file, you cannot remove the fragment at runtime. 
 
-
-	
+```
 		<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     	android:orientation="horizontal"
     	android:layout_width="match_parent"
@@ -42,7 +41,7 @@ When you add a fragment to an activity layout by defining the fragment in the la
             android:layout_width="0dp"
             android:layout_height="match_parent" />
 		</LinearLayout>
-		
+```
 		
 Each fragment requires a unique identifier that the system can use to restore the fragment if the activity is restarted (and which you can use to capture the fragment to perform transactions, such as remove it). There are ***three ways to provide an ID for a fragment***:
 
@@ -53,13 +52,13 @@ Each fragment requires a unique identifier that the system can use to restore th
 
 
 ### 2. programmatically add the fragment to an existing ViewGroup.
-
+```
     	FragmentManager fragmentManager = getFragmentManager();
     	FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
     	ExampleFragment fragment = new ExampleFragment();
     	fragmentTransaction.add(R.id.fragment_container, fragment);
     	fragmentTransaction.commit();
-
+```
 ### 3、Adding a fragment without a UI
 
 1. you can also use a fragment to ***provide a background behavior for the activity without presenting additional UI***.
