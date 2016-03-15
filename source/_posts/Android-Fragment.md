@@ -54,7 +54,7 @@ Each fragment requires a unique identifier that the system can use to restore th
 ### 2. programmatically add the fragment to an existing ViewGroup.
 ```
     	FragmentManager fragmentManager = getFragmentManager();
-    	FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+    	FragmentTransaction fragmentTransaction = 		fragmentManager.beginTransaction();
     	ExampleFragment fragment = new ExampleFragment();
     	fragmentTransaction.add(R.id.fragment_container, fragment);
     	fragmentTransaction.commit();
@@ -68,13 +68,14 @@ Each fragment requires a unique identifier that the system can use to restore th
 ## 四、 Performing Fragment Transactions
 
 1.  using methods such as add(), remove(), and replace(). Then, to apply the transaction to the activity, ***you must call commit()***.
-2.  you might want to call ***addToBackStack()***, in order to add the transaction to a back stack of fragment transactions. ***This back stack is managed by the activity and allows the user to return to the previous fragment state, by pressing the Back button***.
+2.  you might want to call ***addToBackStack()***, in order to add the transaction to a back stack of fragment transactions. ***This back stack is managed by the activity and allows the user to return to the previous fragment state, by pressing the Back button***. 
 
+    ```
 		// Replace whatever is in the fragment_container view with this fragment,
 		// and add the transaction to the back stack
 		transaction.replace(R.id.fragment_container, newFragment);
 		transaction.addToBackStack(null);
-		
+    ```
 3. If you ***add multiple changes to the transaction*** (such as another add() or remove()) and call addToBackStack(), ***then all changes applied before you call commit() are added to the back stack as a single transaction and the Back button will reverse them all together***.
 4. If you ***do not call addToBackStack() when you perform a transaction that removes a fragment, then that fragment is destroyed*** when the transaction is committed and the user cannot navigate back to it.
 5. For each fragment transaction, ***you can apply a transition animation, by calling setTransition() before you commit***.

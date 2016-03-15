@@ -40,11 +40,13 @@ Android Studio项目目录介绍
 	3. cant export a library module to a jar file;
 	4. can include a JAR lib;
 	5. can depend on an external JAR lib;
-			
-    			<uses-library   	
-      				android:name="string"   
-      				android:required=["true" | "false"] />
-			
+	
+		```
+    	<uses-library   	
+      		android:name="string"   
+      		android:required=["true" | "false"] 
+      		/>
+		```
 	6. lib cannot include raw assets;
 	7. lib platform version要等于或低于app version;
 3. **src**
@@ -58,7 +60,8 @@ Android Studio项目目录介绍
 
 1. **androidTest**
 2. **main/AndroidManifest**   
-
+    
+    ```
 		<uses-adk
 			android:minSdkVersion=""
 			android:targetSdkVersion=""/>
@@ -73,7 +76,7 @@ Android Studio项目目录介绍
 				<service
 				<receiver
 				<provider
-			
+	```
 				
 3. **main/java**  
 4. **main/jni**

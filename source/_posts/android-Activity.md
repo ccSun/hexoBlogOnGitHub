@@ -102,10 +102,11 @@ B onPause() -> A onRestart() -> A onStart() -> A onResume() -> B onStop() -> B o
 
 1. Call finish() after startActivity() will lead A activity to a leaked activity. // 内存优化 内存溢出
 
+    ```
 		Intent intent = new Intent(A.this, B.class);
 		MainActivity.this.startActivity(intent);
 		MainActivity.this.finish();
-	
+	```
 2. to be continued
 
 
