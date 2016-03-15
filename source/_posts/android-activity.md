@@ -11,7 +11,7 @@ date: 2016-03-11 14:59:37
 
 ## 一、 Acvitity生命周期
 
-![Acvitity Lifecycle](https://github.com/ccSun/ccsun.github.io/blob/master/2016/03/11/android-activity/activity_lifecycle.png?raw=true)
+![Acvitity Lifecycle](https://github.com/ccSun/hexoBlogOnGitHub/blob/master/source/_posts/android-activity/activity_lifecycle.png?raw=true)
 
 
 ### 1. Starting an Activity
