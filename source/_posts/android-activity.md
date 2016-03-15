@@ -8,7 +8,9 @@ tags:
   - 内存溢出
 date: 2016-03-11 14:59:37
 ---
+To be continue http://developer.android.com/guide/components/activities.html Implementing a user interface
 收录所有与Activity相关的内容。如生命周期，状态保存，内存溢出，启动模式等。
+
 ## 一、 Acvitity生命周期
 
 ![Acvitity Lifecycle](https://github.com/ccSun/hexoBlogOnGitHub/blob/master/source/_posts/android-activity/activity_lifecycle.png?raw=true)
@@ -30,12 +32,15 @@ date: 2016-03-11 14:59:37
 ### 3. Resume Your Activity
 
 1. you should implement onResume() to initialize components that you release during onPause() and perform any other initializations that must occur each time the activity enters the Resumed state (such as begin animations and initialize components only used while the activity has user focus).
+2. When the activity resumes, you can reacquire the necessary resources and resume actions that were interrupted. 
 
 ### 4. Stop Your Activity
 
 1. Once your activity is stopped, **the system might destroy the instance if it needs to recover system memory**. In extreme cases, the system might **simply kill your app process without calling the activity's final onDestroy()** callback, so it's important you **use onStop() to release resources that might leak memoy..*
 
 2. **Even if the system destroys your activity while it's stopped, it still retains the state of the View objects** (such as text in an EditText) in a Bundle (a blob of key-value pairs) and restores them if the user navigates back to the same instance of the activity
+
+3. when stopped, your activity should release any large objects, such as network or database connections.
 
 ### 5. Start/Restart Your Activity
 
