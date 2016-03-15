@@ -24,7 +24,7 @@ XCode工具的日常操作、错误提示及修正方式。
 	#progma mark - 分割线
 
 8. command + 点击功能菜单的函数名，会排序显示 
-	![My WechatId is ccSun89.](./xcode-manual/function-menu.jpg)
+	![My WechatId is ccSun89.](./Xcode-Manual/function-menu.jpg)
 
 9. option + 点击代码，调出 Documentation and api reference（Help中也可打开）
 
