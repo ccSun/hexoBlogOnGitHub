@@ -7,7 +7,8 @@ title: 叶枫很疯
 subtitle:
 description:
 author: 叶枫
-language:
+language: zh-CN
+## 对应themes下的language目录中的设定
 timezone:
 
 # URL
@@ -65,6 +66,7 @@ pagination_dir: page
 ## Themes: http://hexo.io/themes/
 
 theme: maupassant
+## https://github.com/tufu9441/maupassant-hexo.git themes/maupassant
 ## theme: yilia
 
 # Deployment
