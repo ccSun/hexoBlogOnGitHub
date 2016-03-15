@@ -6,7 +6,7 @@ tags:
   - Fragment
 date: 2016-03-11 17:08:09
 ---
-
+收录于Fragment相关的内容，如生命周期，如何添加到activity，fragment通讯等。
 ## 一、 Fragmentst Lifecycle
 
 1. A fragment must always be embedded in an activity and the fragment's lifecycle is directly affected by the host activity's lifecycle. For example, when the activity is paused, so are all fragments in it, and when the activity is destroyed, so are all fragments. 
