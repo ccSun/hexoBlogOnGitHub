@@ -2,7 +2,7 @@ title: Android-Fragment
 categories:
   - Android
 tags:
-  - Anroid
+  - Android
   - Fragment
 date: 2016-03-11 17:08:09
 ---
