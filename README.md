@@ -1,2 +1,0 @@
-# hexoBlogOnGitHub
-My Hexo Blog.
