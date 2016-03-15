@@ -47,6 +47,10 @@ date: 2016-03-11 14:59:37
 2. Your activity will be **destroyed and recreated each time the user rotates the screen.**
 3. If onSaveInstanceState() is called, **this method will occur before onStop().** There are no guarantees about whether it will occur before or after onPause().
 
+### 7. Destroy an Activity
+1. onPause() -> Process Killed
+2. onPause() -> onStop() -> Process Killed
+3. onPause() -> onStop() -> onDestroy()
 
 ## 二、 状态变化
 
@@ -64,7 +68,7 @@ date: 2016-03-11 14:59:37
 	3. When you press Power button;
 	4. WHen you long press Power button to change to another application;
 	5. WHen you rotate the screen;
-	总结起来就是：当系统有可能在你不知道的情况下销毁Activity的情况下，系统会帮你调用onSaveInstanceState()给你机会保存数据。实际操作的体验是：只有切换横竖屏的时候，文本框的数据会消失，其他情况都不会消失。但是确实都会call onSaveInstanceState()。
+	总结起来就是：当系统有可能在你不知道的情况下销毁Activity的情况下，系统会帮你调用onSaveInstanceState()给你机会保存数据。实际操作的体验是：只有切换横竖屏的时候，文本框的数据会消失，其他情况都不会消失。但是确实都会call onSaveInstanceState()。默认的实现中，系统已经默认提供实现保存ui的状态信息。
 
 ### 2. Restore Your Activity State
 
@@ -79,10 +83,19 @@ date: 2016-03-11 14:59:37
 
 ### 3. Calling sequence
 
-onStart() -> onRestoreInstanceState()
+#### a. onStoreInstanceState() & onRestoreInstanceState()
+onStart() -> onRestoreInstanceState()    
 onSaveInstanceState() -> onStop()
 
+
 ***There are no guarantees about whether it will occur before or after onPause().***
+
+#### b. Activity A & B
+
+(1) A start B:    
+A onPause() -> B onCreate() -> B onStart() -> B onResume() -> A onStop()    
+(2) B returen to A:    
+B onPause() -> A onRestart() -> A onStart() -> A onResume() -> B onStop() -> B onDestroy()    
 
 
 ## 三、 Leaked Activity
@@ -96,10 +109,14 @@ onSaveInstanceState() -> onStop()
 2. to be continued
 
 
+## 四、 Activity Launch Mode
 
+### 1. Brief Introduction
+ 
+Activity Stack is a LIFO stack.    
+一个应用程序的优先级是受最高优先级的Activity影响的。Android内存管理使用栈来决定基于Activity的应用程序的优先级,决定某个应用程序是否要终结去释放资源。 
 
-
-
+### 2. 
 
 
 
