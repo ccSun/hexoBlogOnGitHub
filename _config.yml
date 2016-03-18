@@ -66,7 +66,7 @@ pagination_dir: page
 ## Themes: http://hexo.io/themes/
 
 theme: maupassant
-## https://github.com/tufu9441/maupassant-hexo.git themes/maupassant
+## https://github.com/ccSun/maupassant-hexo.git themes/maupassant
 ## theme: yilia
 
 # Deployment
