@@ -8,7 +8,6 @@ tags:
   - 内存溢出
 date: 2016-03-11 14:59:37
 ---
-To be continue http://developer.android.com/guide/components/activities.html Implementing a user interface
 收录所有与Activity相关的内容。如生命周期，状态保存，内存溢出，启动模式等。
 
 ## 一、 Acvitity生命周期
