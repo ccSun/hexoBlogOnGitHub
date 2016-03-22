@@ -19,8 +19,11 @@ To be continue http://developer.android.com/guide/components/activities.html Imp
 ### 1. Starting an Activity
 
 1. you might call finish() from within onCreate() to destroy the activity. In this case, the system immediately calls onDestroy() without calling any of the other lifecycle methods.
+2. For example, if your activity has a thread running in the background to download data from the network, it might create that thread in onCreate() and then stop the thread in onDestroy().
 
 ### 2. Pause Your Activity
+
+Another activity is visible on top of this one and that activity is partially transparent or doesn't cover the entire screen.A paused activity is completely alive, but can be killed by the system in extremely low memory situations. the system can drop it from memory either by asking it to finish (calling its finish() method), or simply killing its process.
 
 1. You should usually use the onPause() callback to:
 	 * Stop animations or other ongoing actions that could **consume CPU**.
@@ -28,19 +31,23 @@ To be continue http://developer.android.com/guide/components/activities.html Imp
 	 * **Release system resources**, such as broadcast receivers, handles to sensors (like GPS), or any resources that may affect battery life while your activity is paused and the user does not need them.	 
 
 2. **avoid performing CPU-intensive work during onPause()**, such as writing to a database, because **it can slow the visible transition to the next activity** (you should instead **perform heavy-load shutdown operations during onStop()**).
+3. Because this state (Resume & Pause) can transition often, the code in these two methods should be fairly lightweight in order to avoid slow transitions that make the user wait.
 
 ### 3. Resume Your Activity
 
 1. you should implement onResume() to initialize components that you release during onPause() and perform any other initializations that must occur each time the activity enters the Resumed state (such as begin animations and initialize components only used while the activity has user focus).
 2. When the activity resumes, you can reacquire the necessary resources and resume actions that were interrupted. 
+3. Because this state (Resume & Pause) can transition often, the code in these two methods should be fairly lightweight in order to avoid slow transitions that make the user wait.
 
 ### 4. Stop Your Activity
 
-1. Once your activity is stopped, **the system might destroy the instance if it needs to recover system memory**. In extreme cases, the system might **simply kill your app process without calling the activity's final onDestroy()** callback, so it's important you **use onStop() to release resources that might leak memoy..*
+The activity is completely obscured by another activity (the activity is now in the "background"). However, it is no longer visible to the user and it can be killed by the system when memory is needed elsewhere. the system can drop it from memory either by asking it to finish (calling its finish() method), or simply killing its process.
+
+1. Once your activity is stopped, **the system might destroy the instance if it needs to recover system memory**. In extreme cases, the system might **simply kill your app process without calling the activity's final onDestroy()** callback, so it's important you **use onStop() to release resources that might leak memoy..**
 
 2. **Even if the system destroys your activity while it's stopped, it still retains the state of the View objects** (such as text in an EditText) in a Bundle (a blob of key-value pairs) and restores them if the user navigates back to the same instance of the activity
 
-3. when stopped, your activity should release any large objects, such as network or database connections.
+3. when stopped, your activity should release any large objects, such as network or database connections. onStart() & onStop() maintains resources that are needed to show the activity to the user. For example, you can register a BroadcastReceiver in onStart() to monitor changes that impact your UI, and unregister it in onStop() when the user can no longer see what you are displaying. 
 
 ### 5. Start/Restart Your Activity
 
@@ -72,8 +79,8 @@ To be continue http://developer.android.com/guide/components/activities.html Imp
 	2. When one acivity come in front of the current one, such as someone call in;
 	3. When you press Power button;
 	4. WHen you long press Power button to change to another application;
-	5. WHen you rotate the screen;
-	总结起来就是：当系统有可能在你不知道的情况下销毁Activity的情况下，系统会帮你调用onSaveInstanceState()给你机会保存数据。实际操作的体验是：只有切换横竖屏的时候，文本框的数据会消失，其他情况都不会消失。但是确实都会call onSaveInstanceState()。默认的实现中，系统已经默认提供实现保存ui的状态信息。
+	5. WHen you rotate the screen;(onPause -> onSaveInstanceState -> onStop -> onDestroy -> onCreate -> onRestart -> onResume.  如果有onSaveInstanceState才会调用onRestoreInstanceState，所以在onRetsoreState中不用检查Bundle为空的case。)
+	总结起来就是：当系统有可能在你不知道的情况下销毁Activity的情况下，系统会帮你调用onSaveInstanceState()给你机会保存数据。实际操作的体验是：只有切换横竖屏的时候，文本框的数据会消失，其他情况都不会消失。但是确实都会call onSaveInstanceState()。默认的实现中，系统已经默认提供实现保存ui的状态信息。前提是：The only work required of you is to provide a unique ID (with the android:id attribute) for each widget you want to save its state. If a widget does not have an ID, then the system cannot save its state.
 
 ### 2. Restore Your Activity State
 
@@ -112,10 +119,58 @@ B onPause() -> A onRestart() -> A onStart() -> A onResume() -> B onStop() -> B o
 		MainActivity.this.startActivity(intent);
 		MainActivity.this.finish();
 	```
-2. to be continued
+2. ***to be continued***
 
+## 四、 Start An Activity
+1. implict intent
+	
+	```
+		Intent intent = new Intent(Intent.ACTION_SEND);
+		intent.putExtra(Intent.EXTRA_EMAIL, recipientArray);
+		startActivity(intent);
+	```
+2. explict intent
 
-## 四、 Activity Launch Mode
+	```
+		Intent intent = new Intent(this, SignInActivity.class);
+		startActivity(intent);
+	```
+3. start activity with a result
+
+	```
+		private void pickContact() {
+    		// Create an intent to "pick" a contact, as defined by the content provider URI
+    		Intent intent = new Intent(Intent.ACTION_PICK, Contacts.CONTENT_URI);
+    		startActivityForResult(intent, PICK_CONTACT_REQUEST);
+		}
+		
+		@Override
+		protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    	// If the request went well (OK) and the request was PICK_CONTACT_REQUEST
+    	if (resultCode == Activity.RESULT_OK && requestCode == PICK_CONTACT_REQUEST) {
+    		// ...
+    	}
+}
+	```
+
+## 、 Declaring Activity <intent-filter>
+1. If you intend for your application to be self-contained and not allow other applications to activate its activities, then you don't need any other intent filters. Only one activity should have the "main" action and "launcher" category.
+2. However, if you want your activity to respond to implicit intents that are delivered from other applications, you must include an <intent-filter> that includes an <action> element and, optionally, a <category> element and/or a <data> element. 
+1. The <action> element specifies that this is the "main" entry point to the application. 
+	
+	```
+		<action android:name="android.intent.action.MAIN" />
+
+	```
+2. The <category> element specifies that this activity should be listed in the system's application launcher (to allow users to launch this activity).
+
+	```
+		<category android:name="android.intent.category.LAUNCHER" />
+
+	```
+***In order to receive implicit intents, you must include the CATEGORY_DEFAULT category in the intent filter***. The methods startActivity() and startActivityForResult() treat all intents as if they declared the CATEGORY_DEFAULT category. If you do not declare it in your intent filter, no implicit intents will resolve to your activity.
+
+## 、 Activity Launch Mode
 
 ### 1. Brief Introduction
  
