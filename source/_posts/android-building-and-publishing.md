@@ -1,4 +1,4 @@
-title: android-building-and-publishing
+title: Android-Building-And-Publishing
 categories:
   - Android
 tags:
