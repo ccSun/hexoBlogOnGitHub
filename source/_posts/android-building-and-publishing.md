@@ -5,9 +5,10 @@ tags:
   - Android
   - Build
   - Gradle
+  - Signing
 date: 2015-11-25 15:46:41
 ---
-Android app build and publish processes.
+Android app build and publish processes. Need to add gradle part.
 
 
 ## 一、 Signing Types
