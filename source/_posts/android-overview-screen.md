@@ -22,7 +22,7 @@ date: 2016-03-24 14:36:50
 
 ### 1. Two types Diff
 
-1. \<activity> attr:     
+1. manifest activity attr:     
 You can choose between ***always*** opening the document in a new task or reusing an existing task for the document
 2. Intent flag:    
 affords greater control over when and how a document gets opened or reopened in the overview screen
