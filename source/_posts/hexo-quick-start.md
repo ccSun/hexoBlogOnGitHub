@@ -1,5 +1,5 @@
 title: Hexo Quick Start
-date: 2016-01-23 15:36:16
+date: 2015-06-01 15:36:16
 categories: 
 - Hexo
 tags:
