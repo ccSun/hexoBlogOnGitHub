@@ -3,6 +3,7 @@ categories:
   - Android
 tags:
   - Android
+  - Optimization
   - DDMS
   - Monitor
 date: 2016-01-18 16:33:10
@@ -22,9 +23,9 @@ The DDMS "base port" (8700, by default). The base port is a port forwarder, whic
 
 
 1. You don't always have to restart your app to debug it. To debug an app that you're already running:    
-![](https://github.com/ccSun/hexoBlogOnGitHub/blob/master/source/_posts/android-ddms/ddms_connect.png?raw=true)
+![](https://github.com/ccSun/hexoBlogOnGitHub/blob/master/source/_posts/android-ddms-and-monitor/ddms_connect.png?raw=true)
 2. 分析页面的布局结构，树状结构看到布局及item id。Dump view hierarchy from ui automator.    
-![](https://github.com/ccSun/hexoBlogOnGitHub/blob/master/source/_posts/android-ddms/view_hierarchy.png?raw=true)
+![](https://github.com/ccSun/hexoBlogOnGitHub/blob/master/source/_posts/android-ddms-and-monitor/view_hierarchy.png?raw=true)
 
 ### 1. Viewing heap usage for a process
 ### 2. Tracking memory allocation of objects
@@ -41,10 +42,25 @@ The DDMS "base port" (8700, by default). The base port is a port forwarder, whic
  1. Switching between Devices and Apps 
  2. Taking a Screen Capture of the Device 
  3. Recording a Video from the Screen 
- 4. Examining System Information 
- 
+ 4. Examining System Information     
+ ![](https://github.com/ccSun/hexoBlogOnGitHub/blob/master/source/_posts/android-ddms-and-monitor/system_info.png?raw=true)
     * Activity Manager State - dumpsys activity
     * Package Information - dumpsys package
     * Memory Usage - dumpsys meminfo
     * Memory Use Over Time - dumpsys procstats
     * Graphics State - dumpsys gfxinfo
+    
+### 1. Logcat
+### 2. Memory Monitor
+* Show a graph of available and allocated memory over time.
+* Show garbage collection (GC) events over time.
+* Initiate garbage collection events.
+* Quickly test whether app slowness might be related to excessive garbage collection events.
+* Quickly test whether app crashes may be related to running out of memory.   
+
+Dump memory 后参数说明：    
+developer.android.com/tools/help/am-memory.html#tracking
+
+### 3. CPU Monitor
+### 4. GPU Monitor
+### 5. Network Monitor
