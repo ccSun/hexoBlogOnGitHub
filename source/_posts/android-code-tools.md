@@ -8,6 +8,7 @@ tags:
   - DeepLink
   - AppIndex
   - Optimization
+  - Tools
 date: 2016-01-25 17:20:08
 ---
 Lint检查潜在错误、优化；Annotations优化参数定义，增加可读性；DeepLink实现Android和H5页面跳转；App Index可以网页搜索app内部的功能。Android和iOS都可添加deep link以及app index：https://developers.google.com/app-indexing/introduction。
