@@ -44,7 +44,10 @@ The Hierarchy Viewer allows you to debug and optimize your user interface. It pr
 ### 4. Build Tools
 
 ##### 1. JOBB
-##### 2. ProGuard
+##### 2. aapt
+
+1. ~/sdk/build-tools/xxxx/aapt dump badging xxx.apk 查看包的基本信息，如packageid，version，permission等
+##### 3. ProGuard
 
 1. 优化方式：移除未使用代码，模糊重命名类、变量和方法；
 2. 好处：更小的apk包，并且很难被反破解；
