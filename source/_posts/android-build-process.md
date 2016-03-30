@@ -99,8 +99,50 @@ dependencies {
 
 1. 为何要用applicationId？ manifest里的packagename是可以唯一标示apk的。packagename也用于很多资源文件的包头，包括R.java。如果同时发布一个pro和一个free版本，代码里引用的又都是com.xxx.R;再发布的时候两个id相同的是不能发布的。所以用packagename来确定包头，用applicationId来区分不同的app。对应的debug版本添加applicationIdSuffix ".debug"。
 
+2. Source directories
+To build each version of your app, the build system combines source code and resources from:
+	* src/main/ - the main source directory (the default configuration common to all variants)
+	* src/<buildType>/ - the source directory
+	* src/<productFlavor>/ - the source directory
+The build type and product flavor source directories are optional.    
+For projects that do not define any flavors, the build system uses the defaultConfig settings:
+	* src/main/ (default configuration)
+	* src/release/ (build type)
+	* src/debug/ (build type)
+
+3. For projects that define a set of product flavors, the build system merges the build type, product flavor and main source directories. also merges all the manifests into a single manifest. The manifest merge priority from lowest to highest is libraries/dependencies -> main src -> productFlavor -> buildType. Resources with the same name also applies for this priority sequence.
+
+4. manifest合并修改语法：http://developer.android.com/tools/building/manifest-merge.html#markers-selectors
+
+
 ***Output***    
 This creates your Android application .apk file inside the module build/ directory, named <your_module_name>-release.apk. This .apk file has been signed with the private key specified in build.gradle file and aligned with zipalign. It's ready for installation and distribution.
 
 
 ### 2. Build signed and aligned
+
+
+## 四、 Apps Over 65k Methods
+
+1. build error:
+	* Earlier versions of the build system report this error as follows
+	
+		```
+		Conversion to Dalvik format failed:
+Unable to execute dex: method ID not in [0, 0xffff]: 65536
+		```
+		
+	* More recent versions of the Android build system display a different error
+	
+		```
+		trouble writing output:
+Too many field references: 131000; max is 65536.
+You may try using --multi-dex option.
+		```
+一个dalvik里能引用的方法数上限65536个。
+
+
+2. Android application (APK) files contain executable bytecode files in the form of Dalvik Executable (DEX) files；The Dalvik Executable specification ***limits the total number of methods that can be referenced within a single DEX file to 65,536***, including Android framework methods, library methods, and methods in your own code. ***Getting past this limit requires that you configure your app build process to generate more than one DEX file***, known as a multidex configuration. 
+
+3. Solution:
+http://developer.android.com/tools/building/multidex.html#about
