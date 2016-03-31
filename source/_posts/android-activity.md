@@ -46,7 +46,15 @@ The activity is completely obscured by another activity (the activity is now in 
 
 2. **Even if the system destroys your activity while it's stopped, it still retains the state of the View objects** (such as text in an EditText) in a Bundle (a blob of key-value pairs) and restores them if the user navigates back to the same instance of the activity
 
-3. when stopped, your activity should release any large objects, such as network or database connections. onStart() & onStop() maintains resources that are needed to show the activity to the user. For example, you can register a BroadcastReceiver in onStart() to monitor changes that impact your UI, and unregister it in onStop() when the user can no longer see what you are displaying. 
+3. when stopped, your activity should release any large objects, such as network or database connections. onStart() & onStop() maintains resources that are needed to ***show the activity*** to the user. For example, you can register a BroadcastReceiver in onStart() to monitor changes that impact your UI, and unregister it in onStop() when the user can no longer see what you are displaying.    
+***release:***
+	* network
+	* database
+	* receiver
+
+4. 内存不足时，会回调onTrimMemory()释放图片、数组、缓存等ui显示资源,根据不同的内存状态做不同的处理。（onLowMemory：被回调时，已经没有后台进程，是在最后一个后台进程被杀时调用，一般情况是low memory killer 杀进程后触发；android 4.0之后onTrimMemory被回调时，还有后台进程，触发更频繁，每次计算进程优先级时，只要满足条件，都会触发）。先调用onStop()时，不用释放ui资源，因为用户有可能返回；
+***release***
+	* ui显示需要的资源图片、数组、缓存
 
 ### 5. Start/Restart Your Activity
 
