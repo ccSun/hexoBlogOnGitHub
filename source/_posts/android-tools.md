@@ -47,6 +47,7 @@ The Hierarchy Viewer allows you to debug and optimize your user interface. It pr
 ##### 2. aapt
 
 1. ~/sdk/build-tools/xxxx/aapt dump badging xxx.apk 查看包的基本信息，如packageid，version，permission等
+
 ##### 3. ProGuard
 
 1. 优化方式：移除未使用代码，模糊重命名类、变量和方法；
@@ -68,6 +69,7 @@ The Hierarchy Viewer allows you to debug and optimize your user interface. It pr
     ```
 
 4. progurad file:
+
 	* ***proguard-android.txt*** : the default ProGuard settings from the Android SDK tools/proguard/ folder
 	* ***proguard-android-optimize.txt*** : file is also available in this Android SDK folder with the same rules but with optimizations enabled. 不建议使用，并不是所有的优化都能在所有的dalvik上正确运行。
 	* ***proguard-rules.pro*** : file is at root of the module for customing ProGuard rules specific to the current module. 
@@ -115,6 +117,7 @@ You can fix this by :
 	```
 	-keep public class <MyClass>
 	```
+	
 7. Debugging considerations for published applications
 Save the mapping.txt file for every release that you publish to your users. A project's mapping.txt file is overwritten every time you do a release build.
 

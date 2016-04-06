@@ -15,6 +15,7 @@ date: 2016-03-11 17:08:09
 4. ***onCreateView()*** : return a View from this method that is the root of your fragment's layout.
 5. You can ***save the state during the fragment's onSaveInstanceState()*** callback and ***restore it during either onCreate(), onCreateView(), or onActivityCreated()***.
 6. 只有Activity resume之后，才能操作fragment，否则fragment生命周期跟随anctivity不能操作，如在onPause，onStop等。
+7. setretaininstance(true)，横竖屏切换的时候fragment不会被销毁，数据都会被保存下来。这样其中的imgView、editText等内存状态都还在内存。
 
 ![Fragmentst Lifecycle](https://github.com/ccSun/hexoBlogOnGitHub/blob/master/source/_posts/android-fragment/fragment_lifecycle.png?raw=true)   
 
