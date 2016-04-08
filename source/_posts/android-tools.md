@@ -50,7 +50,7 @@ The Hierarchy Viewer allows you to debug and optimize your user interface. It pr
 
 ##### 3. ProGuard
 
-1. 优化方式：移除未使用代码，模糊重命名类、变量和方法；
+1. 优化方式：移除二进制bytecode中未使用的classes/fields/methods;删除bytecode中的debuging info(文件名，行数，方法名变量名等)，模糊重命名类、变量和方法；
 2. 好处：更小的apk包，并且很难被反破解；
 3. Enable ***minifyEnabled*** property in the build.gradle
  

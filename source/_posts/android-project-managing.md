@@ -88,7 +88,7 @@ Moving all densities of your launcher icons to density-specific res/mipmap/ fold
 icon Size:    
 
 | name | DPI | iconSize | 四边各留像素 | 实际图像size |
-||||||
+|-|-|-|-|-|
 | ldpi | 120 | 36x36 | 1px | 34x34 |
 | mdpi | 160 | 48x48 | 1px | 46x46 |
 | hdpi | 240 | 72x72 | 2px | 68x68 |
