@@ -11,7 +11,7 @@ Android app的编译、签名过程，及Gradle打包脚本的配置。
 
 ## 一、 Build Process
 
-![Build Process](https://github.com/ccSun/hexoBlogOnGitHub/blob/master/source/_posts/android-build-process/build_process.png?raw=true)
+![Build Process](https://github.com/ccSun/hexoBlogOnGitHub/blob/master/source/_posts/android-building-and-signing/build_process.png?raw=true)
 
 ## 二、 Building in Debug Mode
 
@@ -191,7 +191,7 @@ By signing multiple apps with the same certificate and using signature-based per
 		
 zipalign ensures that all uncompressed data starts with a particular byte alignment relative to the start of the file, which reduces the amount of RAM consumed by an app.对齐资源文件、数据文件，在访问的时候可以节省内存，加快效率。
 
-## 六、 Apps Over 65k Methods
+## 六、 Apps Over 64k Methods
 
 1. build error:
 	* Earlier versions of the build system report this error as follows
