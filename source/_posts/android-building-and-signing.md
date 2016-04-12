@@ -174,9 +174,8 @@ By signing multiple apps with the same certificate and using signature-based per
 
 1. Generate a private key using keytool
 
-
 		$ keytool -genkey -v -keystore my-release-key.keystore -alias alias_name -keyalg RSA -keysize 2048 -validity 10000
-	
+
 2. Sign your app with your private key using jarsigner
 
 		$ jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore my-release-key.keystore my_application.apk alias_name
