@@ -198,15 +198,15 @@ zipalign ensures that all uncompressed data starts with a particular byte alignm
 	
 		```
 		Conversion to Dalvik format failed:
-Unable to execute dex: method ID not in [0, 0xffff]: 65536
+		Unable to execute dex: method ID not in [0, 0xffff]: 65536
 		```
 		
 	* More recent versions of the Android build system display a different error
 	
 		```
 		trouble writing output:
-Too many field references: 131000; max is 65536.
-You may try using --multi-dex option.
+		Too many field references: 131000; max is 65536.
+		You may try using --multi-dex option.
 		```
 一个dalvik里能引用的方法数上限65536个。
 
