@@ -203,4 +203,7 @@ class RetainFragment extends Fragment {
 
 ## 四、 Managing Bitmap Memory
 
+
+
+
 ## 五、 Displaying Bitmaps in Your UI

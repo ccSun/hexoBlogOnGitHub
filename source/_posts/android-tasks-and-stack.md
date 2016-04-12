@@ -2,7 +2,6 @@ title: Android-Tasks-And-Stack
 categories:
   - Android
 tags:
-  - Android
   - Tasks
   - Stack
 date: 2016-03-15 18:26:19

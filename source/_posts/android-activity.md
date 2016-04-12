@@ -145,22 +145,22 @@ B onPause() -> A onRestart() -> A onStart() -> A onResume() -> B onStop() -> B o
 3. start activity with a result
 
 	```
-		private void pickContact() {
-    		// Create an intent to "pick" a contact, as defined by the content provider URI
-    		Intent intent = new Intent(Intent.ACTION_PICK, Contacts.CONTENT_URI);
-    		startActivityForResult(intent, PICK_CONTACT_REQUEST);
-		}
-		
-		@Override
-		protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-    	// If the request went well (OK) and the request was PICK_CONTACT_REQUEST
-    	if (resultCode == Activity.RESULT_OK && requestCode == PICK_CONTACT_REQUEST) {
-    		// ...
-    	}
-}
+        private void pickContact() {
+            // Create an intent to "pick" a contact, as defined by the content provider URI
+            Intent intent = new Intent(Intent.ACTION_PICK, Contacts.CONTENT_URI);
+            startActivityForResult(intent, PICK_CONTACT_REQUEST);
+        }
+
+        @Override
+        protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+            // If the request went well (OK) and the request was PICK_CONTACT_REQUEST
+            if (resultCode == Activity.RESULT_OK && requestCode == PICK_CONTACT_REQUEST) {
+                // ...
+            }
+        }
 	```
 
-## 、 Declaring Activity <intent-filter>
+## 五、 Declaring Activity <intent-filter>
 1. If you intend for your application to be self-contained and not allow other applications to activate its activities, then you don't need any other intent filters. Only one activity should have the "main" action and "launcher" category.
 2. However, if you want your activity to respond to implicit intents that are delivered from other applications, you must include an <intent-filter> that includes an <action> element and, optionally, a <category> element and/or a <data> element. 
 1. The <action> element specifies that this is the "main" entry point to the application. 
@@ -177,14 +177,15 @@ B onPause() -> A onRestart() -> A onStart() -> A onResume() -> B onStop() -> B o
 	```
 ***In order to receive implicit intents, you must include the CATEGORY_DEFAULT category in the intent filter***. The methods startActivity() and startActivityForResult() treat all intents as if they declared the CATEGORY_DEFAULT category. If you do not declare it in your intent filter, no implicit intents will resolve to your activity.
 
-## 、 Activity Launch Mode
+## 六、 Activity Launch Mode
 
 ### 1. Brief Introduction
  
 Activity Stack is a LIFO stack.    
 一个应用程序的优先级是受最高优先级的Activity影响的。Android内存管理使用栈来决定基于Activity的应用程序的优先级,决定某个应用程序是否要终结去释放资源。 
 
-### 2. 
+### 2. 启动模式
+参考Android-Tasks-And-Stack。
 
 
 

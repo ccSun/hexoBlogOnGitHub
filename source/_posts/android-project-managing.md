@@ -2,13 +2,11 @@ title: Android-Project-Managing
 categories:
   - Android
 tags:
-  - Android
-  - IconSize
-  - Test
+  - 项目目录
   
-date: 2016-02-24 11:07:14
+date: 2015-06-03 11:07:14
 ---
-Android项目基本配置和管理，以及icon及其size。
+Android项目目录基本配置和管理，以及icon及其size。
 ## 一、 Android Project Files
 
 ### 1. IDE Setting
@@ -57,9 +55,9 @@ Customizable properties for the build system. You can edit this file to override
 					<action
 					<category
 					<data
-				<service
-				<receiver
-				<provider
+			<service
+			<receiver
+			<provider
 	```
 				
 3. **main/java**  
@@ -78,24 +76,7 @@ Files that you save here are compiled into an .apk file as-is, and the original 
 	7. values
 		string.xml, color.xml, dimens.xml, styles.xml
 
-## 三、 Managing Launcher Icons as mipmap Resources
-
-App资源优化会移除一些未使用的屏幕密度资源，在某些屏上会模糊。
-Apps should use the mipmap/ resource folders for launcher icons. The Android system preserves these resources regardless of density stripping, and ensures that launcher apps can pick icons with the best resolution for display.     
-Moving all densities of your launcher icons to density-specific res/mipmap/ folders (for example res/mipmap-mdpi/ and res/mipmap-xxxhdpi/)。
-***Note:***添加一个当前更高的icon以增加对更高分辨率的兼容性。
-    
-icon Size:    
-
-| name | DPI | iconSize | 四边各留像素 | 实际图像size |
-|-|-|-|-|-|
-| ldpi | 120 | 36x36 | 1px | 34x34 |
-| mdpi | 160 | 48x48 | 1px | 46x46 |
-| hdpi | 240 | 72x72 | 2px | 68x68 |
-| xhdpi| 320 | 96x96 | 4px | 88x88 |
-| xxhdpi| 480 | 140x140	 | - | - |		
-
-## 四、 Library Module
+## 三、 Library Module
 When you build an application that depends on a library module, the SDK tools ***compile the library into a temporary JAR file*** and use it in the main module, ***then uses the result to generate the .apk***
     
 ***You cannot:***    
@@ -110,12 +91,12 @@ When you build an application that depends on a library module, the SDK tools **
 2.  can include a JAR into a lib module; manually edit the dependent application modules's build path and add a path to the JAR file.
 3.  can include an external jar lib into a lib module;
 
-		```
+	```
 	    <uses-library   	
       		android:name="string"   
       		android:required=["true" | "false"] 
       		/>
-		```
+	```
 
 ***Resource conflicts***    
 1. If a resource ID is defined in both the application and the library, the tools ensure that ***the resource declared in the application gets priority*** and that ***the resource in the library module is not compiled into the application .apk***
@@ -127,7 +108,7 @@ When you build an application that depends on a library module, the SDK tools **
 2. No restriction on library module names
 3. Each library module creates its own R class 
 
-## 五、 Test Project
+## 四、 Test Project
 The src/androidTest source set may not be created for every type of available module template. If this source set is not created, you can just create it for that module.
 
 More Info http://developer.android.com/tools/testing/index.html.
