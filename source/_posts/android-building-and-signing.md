@@ -193,25 +193,23 @@ zipalign ensures that all uncompressed data starts with a particular byte alignm
 
 ## 六、 Apps Over 64k Methods
 
-1. build error:
+1. ***Build Error:***
+
 	* Earlier versions of the build system report this error as follows
 	
-		```
-		Conversion to Dalvik format failed:
-		Unable to execute dex: method ID not in [0, 0xffff]: 65536
-		```
-		
+	```
+	Conversion to Dalvik format failed:
+	Unable to execute dex: method ID not in [0, 0xffff]: 65536
+	```
 	* More recent versions of the Android build system display a different error
 	
-		```
-		trouble writing output:
-		Too many field references: 131000; max is 65536.
-		You may try using --multi-dex option.
-		```
-一个dalvik里能引用的方法数上限65536个。
+	```
+	trouble writing output:
+	Too many field references: 131000; max is 65536.
+	You may try using --multi-dex option.
+	```
 
+1. 一个dalvik里能引用的方法数上限65536个。Android application (APK) files contain executable bytecode files in the form of Dalvik Executable (DEX) files；The Dalvik Executable specification ***limits the total number of methods that can be referenced within a single DEX file to 65,536***, including Android framework methods, library methods, and methods in your own code. ***Getting past this limit requires that you configure your app build process to generate more than one DEX file***, known as a multidex configuration. 
 
-2. Android application (APK) files contain executable bytecode files in the form of Dalvik Executable (DEX) files；The Dalvik Executable specification ***limits the total number of methods that can be referenced within a single DEX file to 65,536***, including Android framework methods, library methods, and methods in your own code. ***Getting past this limit requires that you configure your app build process to generate more than one DEX file***, known as a multidex configuration. 
-
-3. Solution:
+2. Solution:    
 http://developer.android.com/tools/building/multidex.html#about
