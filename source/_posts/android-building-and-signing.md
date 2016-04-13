@@ -5,7 +5,7 @@ tags:
 	- Building
 	- Signing
 	- Gradle
-date: 2015-06-08 15:35:48
+date: 2015-06-18 15:35:48
 ---
 Android app的编译、签名过程，及Gradle打包脚本的配置。
 
