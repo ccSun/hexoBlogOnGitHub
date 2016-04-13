@@ -2,10 +2,8 @@ title: Android-Activity
 categories:
   - Android
 tags:
-  - Android
   - Acivity
-  - 内存优化
-  - 内存溢出
+  - Optimization
 date: 2016-03-11 14:59:37
 ---
 收录所有与Activity相关的内容。如生命周期，状态保存，内存溢出，启动模式等。

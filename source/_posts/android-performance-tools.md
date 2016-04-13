@@ -2,7 +2,6 @@ title: Android-Performance-Tools
 categories:
 	- Android
 tags:
-	- Android
 	- Optimization
 date: 2016-03-30 15:52:25
 ---

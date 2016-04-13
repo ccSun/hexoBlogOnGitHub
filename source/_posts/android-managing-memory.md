@@ -2,7 +2,6 @@ title: Android-Managing-Memory
 categories:
 	- Android
 tags:
-	- Android
 	- Optimization
 date: 2016-03-31 14:30:58
 ---

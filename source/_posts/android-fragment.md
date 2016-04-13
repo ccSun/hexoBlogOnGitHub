@@ -2,7 +2,6 @@ title: Android-Fragment
 categories:
   - Android
 tags:
-  - Android
   - Fragment
 date: 2016-03-11 17:08:09
 ---

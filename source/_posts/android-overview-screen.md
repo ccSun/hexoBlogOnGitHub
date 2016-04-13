@@ -2,7 +2,6 @@ title: Android-Overview-Screen
 categories:
   - Android
 tags:
-  - Android
   - Tasks
   - Stack
   - OverviewScreen

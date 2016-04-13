@@ -2,7 +2,6 @@ title: Android-Loaders
 categories:
   - Android
 tags:
-  - Android
   - Loaders
 date: 2016-03-22 17:49:02
 ---

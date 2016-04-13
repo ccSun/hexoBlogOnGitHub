@@ -2,7 +2,6 @@ title: Android-Ui-Tools
 categories:
   - Android
 tags:
-  - Android
   - Tools
 date: 2015-08-28 19:06:05
 ---

@@ -2,7 +2,6 @@ title: Android-DDMS-And-AndroidMonitor
 categories:
   - Android
 tags:
-  - Android
   - Optimization
   - DDMS
   - Monitor
