@@ -3,14 +3,14 @@ categories:
   - Android
 tags:
   - Fragment
-date: 2016-03-11 17:08:09
+date: 2015-11-11 17:08:09
 ---
 收录于Fragment相关的内容，如生命周期，如何添加到activity，fragment通讯等。
 ## 一、 Fragmentst Lifecycle
 
 1. A fragment must always be embedded in an activity and the fragment's lifecycle is directly affected by the host activity's lifecycle. For example, when the activity is paused, so are all fragments in it, and when the activity is destroyed, so are all fragments. 
 2. You can also ***add it to a back stack***. The back stack allows the user to reverse a fragment transaction (navigate backwards), by pressing the Back button.
-3. ***onCreate()*** : initialize essential components of the fragment that you want to retain when the fragment is paused or stopped, then resumed.除了view之外的做出实话
+3. ***onCreate()*** : initialize essential components of the fragment that you want to retain when the fragment is paused or stopped, then resumed.除了view之外的做初始化。
 4. ***onCreateView()*** : return a View from this method that is the root of your fragment's layout.
 5. You can ***save the state during the fragment's onSaveInstanceState()*** callback and ***restore it during either onCreate(), onCreateView(), or onActivityCreated()***.
 6. 只有Activity resume之后，才能操作fragment，否则fragment生命周期跟随anctivity不能操作，如在onPause，onStop等。
@@ -31,16 +31,16 @@ date: 2016-03-11 17:08:09
 When you add a fragment to an activity layout by defining the fragment in the layout XML file, you cannot remove the fragment at runtime. 
 
 ```
-		<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    	android:orientation="horizontal"
-    	android:layout_width="match_parent"
-    	android:layout_height="match_parent">
-    	<fragment android:name="com.example.news.ArticleReaderFragment"
-            android:id="@+id/viewer"
-            android:layout_weight="2"
-            android:layout_width="0dp"
-            android:layout_height="match_parent" />
-		</LinearLayout>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+android:orientation="horizontal"
+android:layout_width="match_parent"
+android:layout_height="match_parent">
+<fragment android:name="com.example.news.ArticleReaderFragment"
+    android:id="@+id/viewer"
+    android:layout_weight="2"
+    android:layout_width="0dp"
+    android:layout_height="match_parent" />
+</LinearLayout>
 ```
 		
 Each fragment requires a unique identifier that the system can use to restore the fragment if the activity is restarted (and which you can use to capture the fragment to perform transactions, such as remove it). There are ***three ways to provide an ID for a fragment***:
@@ -53,11 +53,11 @@ Each fragment requires a unique identifier that the system can use to restore th
 
 ### 2. programmatically add the fragment to an existing ViewGroup.
 ```
-    	FragmentManager fragmentManager = getFragmentManager();
-    	FragmentTransaction fragmentTransaction = 		fragmentManager.beginTransaction();
-    	ExampleFragment fragment = new ExampleFragment();
-    	fragmentTransaction.add(R.id.fragment_container, fragment);
-    	fragmentTransaction.commit();
+FragmentManager fragmentManager = getFragmentManager();
+FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+ExampleFragment fragment = new ExampleFragment();
+fragmentTransaction.add(R.id.fragment_container, fragment);
+fragmentTransaction.commit();
 ```
 ### 3、Adding a fragment without a UI
 
