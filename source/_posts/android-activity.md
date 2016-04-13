@@ -40,9 +40,9 @@ Another activity is visible on top of this one and that activity is partially tr
 
 The activity is completely obscured by another activity (the activity is now in the "background"). However, it is no longer visible to the user and it can be killed by the system when memory is needed elsewhere. the system can drop it from memory either by asking it to finish (calling its finish() method), or simply killing its process.
 
-1. Once your activity is stopped, **the system might destroy the instance if it needs to recover system memory**. In extreme cases, the system might **simply kill your app process without calling the activity's final onDestroy()** callback, so it's important you **use onStop() to release resources that might leak memoy..**
+1. Once your activity is stopped, **the system might destroy the instance if it needs to recover system memory**. In extreme cases, the system might **simply kill your app process without calling the activity's final onDestroy()** callback, so it's important you **use onStop() to release resources that might leak memoy.**
 
-2. **Even if the system destroys your activity while it's stopped, it still retains the state of the View objects** (such as text in an EditText) in a Bundle (a blob of key-value pairs) and restores them if the user navigates back to the same instance of the activity
+2. **Even if the system destroys your activity while it's stopped, it still retains the state of the View objects** (such as text in an EditText) in a Bundle (a blob of key-value pairs) and restores them if the user navigates back to the same instance of the activity.
 
 3. when stopped, your activity should release any large objects, such as network or database connections. onStart() & onStop() maintains resources that are needed to ***show the activity*** to the user. For example, you can register a BroadcastReceiver in onStart() to monitor changes that impact your UI, and unregister it in onStop() when the user can no longer see what you are displaying.    
 ***release:***
@@ -50,9 +50,14 @@ The activity is completely obscured by another activity (the activity is now in 
 	* database
 	* receiver
 
-4. 内存不足时，会回调onTrimMemory()释放图片、数组、缓存等ui显示资源,根据不同的内存状态做不同的处理。（onLowMemory：被回调时，已经没有后台进程，是在最后一个后台进程被杀时调用，一般情况是low memory killer 杀进程后触发；android 4.0之后onTrimMemory被回调时，还有后台进程，触发更频繁，每次计算进程优先级时，只要满足条件，都会触发）。先调用onStop()时，不用释放ui资源，因为用户有可能返回；
-***release***
-	* ui显示需要的资源图片、数组、缓存
+4. 内存不足时，会回调onLowMemory()/onTrimMemory()释放ui显示使用的图片、数组、缓存等资源。
+
+	* onLowMemory() 被回调时，已经没有后台进程(优先级为background的进程)，是在最后一个后台进程被杀时调用，一般情况是low memory killer 杀进程后触发；可以自定义实现ComponentCallbacks的onLowMemory()方法:
+		
+		```
+		Acitivity.registerComponentCallbacks(callBack);
+		```
+	* onTrimMemory(int) 在android 4.0之后新增，onTrimMemory被回调时，还有后台进程，触发更频繁，每次计算进程优先级时，只要满足条件，都会触发）。先调用onStop()时，不用释放ui资源，因为用户有可能返回；参数是优先级，不同的级别区分；
 
 ### 5. Start/Restart Your Activity
 
@@ -79,13 +84,15 @@ The activity is completely obscured by another activity (the activity is now in 
 
 ### 1. Save Your Activity State
 
-1. When onSaveInstanceState() will be called:
-	1. When you press button Home; But when you press Back this func will not be called;
-	2. When one acivity come in front of the current one, such as someone call in;
-	3. When you press Power button;
-	4. WHen you long press Power button to change to another application;
-	5. WHen you rotate the screen;(onPause -> onSaveInstanceState -> onStop -> onDestroy -> onCreate -> onRestart -> onResume.  如果有onSaveInstanceState才会调用onRestoreInstanceState，所以在onRetsoreState中不用检查Bundle为空的case。)
-	总结起来就是：当系统有可能在你不知道的情况下销毁Activity的情况下，系统会帮你调用onSaveInstanceState()给你机会保存数据。实际操作的体验是：只有切换横竖屏的时候，文本框的数据会消失，其他情况都不会消失。但是确实都会call onSaveInstanceState()。默认的实现中，系统已经默认提供实现保存ui的状态信息。前提是：The only work required of you is to provide a unique ID (with the android:id attribute) for each widget you want to save its state. If a widget does not have an ID, then the system cannot save its state.
+When onSaveInstanceState() will be called:
+
+1. When you press button Home; But when you press Back this func will not be called;
+2. When one acivity come in front of the current one, such as someone call in;
+3. When you press Power button;
+4. When you long press Power button to change to another application;
+5. When you rotate the screen;(onPause -> onSaveInstanceState -> onStop -> onDestroy -> onCreate -> onRestart -> onResume. 这里的调用顺序跟A启动B再返回A是有区别的。如果有onSaveInstanceState才会调用onRestoreInstanceState，所以在onRetsoreState中不用检查Bundle为空的case。)    
+	
+总结起来就是：当系统有可能在你不知道的情况下销毁Activity的情况下，系统会帮你调用onSaveInstanceState()给你机会保存数据。实际操作的体验是：只有切换横竖屏的时候，文本框的数据会消失，其他情况都不会消失。但是确实都会call onSaveInstanceState()。默认的实现中，系统已经默认提供实现保存ui的状态信息。前提是：The only work required of you is to provide a unique ID (with the android:id attribute) for each widget you want to save its state. If a widget does not have an ID, then the system cannot save its state.
 
 ### 2. Restore Your Activity State
 
