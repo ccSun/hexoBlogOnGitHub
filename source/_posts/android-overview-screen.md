@@ -2,9 +2,7 @@ title: Android-Overview-Screen
 categories:
   - Android
 tags:
-  - Tasks
   - Stack
-  - OverviewScreen
 date: 2016-03-24 14:36:50
 ---
 有关Recents列表的操作。但是并没有完全弄懂。收录地址http://developer.android.com/guide/components/recents.html
