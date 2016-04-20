@@ -104,7 +104,7 @@ low memory的时候，会kill LRU least-recently used process.但是也会考虑
 1. int[]效率高于Integer[];
 2. 两个并行的数组比一个（int,int）的Object数组好太多；也就是两个ObjA[]和ObjB[]比一个(ObjA,ObjB)[]效率好很多；
 
-#### 4. 注意使用Float
+##### 4. 注意使用Float
 
 float比int运行速度慢2倍；float和double运行速度差不多，double空间比float大2倍；在desktop开发上，不考虑空间的时候使用double。
 
