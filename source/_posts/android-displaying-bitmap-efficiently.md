@@ -3,7 +3,7 @@ categories:
 	- Android
 tags:
 	- Optimization
-date: 2016-03-31 18:31:43
+date: 2015-12-11 18:31:43
 ---
 在手机上的内存有限(一般每个app至少16M)，而图片资源占用空间极大 。比如Galaxy Nexus的camera占用2592x1936 pixels。如果使用ARGB_888，将占用19MB空间（2592x1936x4bytes）。尤其在listview，gridview中，占用的空间更大，更易发生
 

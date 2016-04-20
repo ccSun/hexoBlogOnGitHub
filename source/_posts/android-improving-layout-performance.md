@@ -17,12 +17,12 @@ UI布局优化。
 
 ## 二、 include/merge/viewstub
 
-1. \<include/>
+1. include
 
 	```
 	<include layout="@layout/titlebar"/>
 	```
-也可以override布局中的layout_*属性，但是width和height时必须的。
+	也可以override布局中的layout_*属性，但是width和height时必须的。
 
 	```
 	<include android:id="@+id/news_title"
@@ -30,7 +30,7 @@ UI布局优化。
         	 android:layout_height="match_parent"
          	 layout="@layout/title"/>
 	```
-2. \<merge/> 被include的时候，merge标签将被去除。
+2. merge 被include的时候，merge标签将被去除。
 
 	```
 	<merge xmlns:android="http://schemas.android.com/apk/res/android">
@@ -46,7 +46,7 @@ UI布局优化。
             android:text="@string/delete"/>
 	</merge>
 	```
-3. \<viewstub> 必须指定layout属性。不占用内存。
+3. viewstub 必须指定layout属性。不占用内存。
 	
 	```
     <ViewStub
