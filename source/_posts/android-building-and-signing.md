@@ -212,3 +212,14 @@ zipalign ensures that all uncompressed data starts with a particular byte alignm
 
 2. Solution:    
 http://developer.android.com/tools/building/multidex.html#about
+
+## 七、 Install And Execute
+
+1. APK打包的是dex文件。
+2. 安装分为两种情况：
+
+	1. Dalvik＋JIT：安装时JIT解析dex文件为odex，dex和odex其实都是Dalvik可以解析的字节码，Dalvik在apk运行时把Dalvik字节码解析为本机机器码执行。解析成odex，运行时dalvik不必每次都从apk中提取dex，速度加快了。但是odex因为字节对齐会比dex扩大1～4倍。
+	2. ART+AOT：安装时AOT解析dex文件为aot文件，但是命名为odex文件。这里的odex文件本质时elf文件，其中都是本机机器码。
+	
+3. JIT: just-in-time
+4. AOT: ahead-of-time，类似于C语言编译时便确定了可执行环境的机器码。
