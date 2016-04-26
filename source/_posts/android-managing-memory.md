@@ -118,7 +118,7 @@ float比int运行速度慢2倍；float和double运行速度差不多，double空
 
 static int VAL = 10; 会通过clinit的初始化方法，保存10到变量VAL中；访问变量的时候通过引用查找变量；
 
-static final VAL = 10; 不会调用clinit方法，使用时会直接食用10的值。
+static final VAL = 10; 不会调用clinit方法，使用时会直接使用10的值。
 
 ##### 3. 避免internal的get/set
 

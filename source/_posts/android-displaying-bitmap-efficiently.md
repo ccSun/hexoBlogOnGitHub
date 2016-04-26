@@ -97,8 +97,12 @@ imgView.setImageBitmap(decodeSampleBitmapFromResource(getResources(), R.id.myima
 ```
 Google案例：
 [Handling Concurrency](http://developer.android.com/training/displaying-bitmaps/process-bitmap.html#concurrency)    
-实现原理：
+简单分析：
+ImageView都会绑定一个Drawable。但是我们需要从这个imageView直接找到当前是否有Async为这个ImageView加载图片。所以自实现一个AsyncDrawable，保存Async的弱引用WeakReference<BitmapWorkerTask> bitmapWorkerTaskReference。
 
+为一个ImageView加载图片的时候，先看当前是否有正在加载相同图片的Async运行。如果没有，则新建Async；在Async onPost加载完图片后，设定到imageView之前，判断这个imageView的drawable的Async是否是当前Async，如果是imageView.setImageBitmap(bitmap);如果不是，那就意味着这个ImageView加载的图片换了。当前的Async加载的图片无用了。
+
+setImageBitmap本质是封装了的setImageDrawable.
 1. Async中软引用imageView，保存被加载的图片文件的id；
 2. 自实现一个BitmapDrawable,软引用一个Async；
 3. 加载图片的时候，new一个async，new一个子类BitmapDrawable，执行async；在这之前先判断为这个imgView加载图片的的async是否正在执行：通过imgView.getDrawable得到drawable，drawble instance of 子类BitMapDrawable，进一步得到对应的Async，拿到Async中正在加载的图片文件id，判断与正准备启动加载的图片是否相同，如果相同，则原来的async继续执行；如果不同，取消原来的async，新建新的async。
@@ -164,12 +168,6 @@ Fetching images from disk is slower than loading from memory and ***should be do
 
 
 //[代码参考](http://developer.android.com/training/displaying-bitmaps/cache-bitmap.html#disk-cache)
-简单分析：
-ImageView都会绑定一个Drawable。但是我们需要从这个imageView直接找到当前是否有Async为这个ImageView加载图片。所以自实现一个AsyncDrawable，保存Async的弱引用WeakReference<BitmapWorkerTask> bitmapWorkerTaskReference。
-
-为一个ImageView加载图片的时候，先看当前是否有正在加载相同图片的Async运行。如果没有，则新建Async；在Async onPost加载完图片后，设定到imageView之前，判断这个imageView的drawable的Async是否是当前Async，如果是imageView.setImageBitmap(bitmap);如果不是，那就意味着这个ImageView加载的图片换了。当前的Async加载的图片无用了。
-
-setImageBitmap本质是封装了的setImageDrawable.
 
 
 ### 3. 横竖屏切换
