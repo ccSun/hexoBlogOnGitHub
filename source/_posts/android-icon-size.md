@@ -6,9 +6,11 @@ tags:
 date: 2015-06-04 16:05:33
 ---
 
-Launcher Icons存放到mipmap目录。但是官方建议也就只有launcher icons放到mipmap目录。Android使用mipmap目录下的资源，在scale上会有更好的性能优化。
+Android使用mipmap目录下的资源，在scale上会有更好的性能优化。App资源优化会移除一些未使用的屏幕密度资源，在某些屏上会模糊。官方建议适用如下的icon：
 
-App资源优化会移除一些未使用的屏幕密度资源，在某些屏上会模糊。
+* Launcher icons.
+* Action bar and tab icons.
+* Notification icons.
 
 Apps should ***use the mipmap/ resource folders for launcher icons***. The Android system preserves these resources regardless of density stripping, and ensures that launcher apps can pick icons with the best resolution for display.     
 
