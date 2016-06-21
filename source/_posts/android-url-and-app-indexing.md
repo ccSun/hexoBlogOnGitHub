@@ -48,7 +48,7 @@ AndroidManifest.xml中activity，generate Deep Link。实际上是添加intent-f
       android:pathPrefix="string"
       android:mimeType="string" />
 ```
-匹配：mimeType或者uri，活着mimeType＋uri    
+匹配：mimeType或者uri，或者mimeType＋uri    
 \<scheme>://\<host>:\<port>[\<path>|\<pathPrefix>|\<pathPattern>]
 
 *Note*    
@@ -78,7 +78,7 @@ AndroidManifest.xml中activity，generate Deep Link。实际上是添加intent-f
 
 * android:scheme
 
-	如果有设定data type mimeType而没有scheme，那么会假定是content:活着file:。
+	如果有设定data type mimeType而没有scheme，那么会假定是content:或者file:。
 	scheme是大小写敏感的，默认都使用小写。
 
 * android:host    

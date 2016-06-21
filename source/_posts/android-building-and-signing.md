@@ -13,7 +13,8 @@ Android app的编译、签名过程，及Gradle打包脚本的配置。
 
 ![Build Process](https://github.com/ccSun/hexoBlogOnGitHub/blob/master/source/_posts/android-building-and-signing/build_process.png?raw=true)
 
-## 二、 Building in Debug Mode
+## 二、 Building Mode
+### 1. Build In Debug Mode
 
 In debug mode, the build tools automatically sign your application with a debug key and optimize the package with zipalign.The debug keystore is located in $HOME/.android/debug.keystore, and is created if not present.
 
@@ -35,17 +36,18 @@ $ ./gradlew assembleDebug
 * APK for the app module is located in app/build/outputs/apk/
 * AAR for any lib modules is located in lib/build/outputs/libs/
 
-## 三、 Building in Release Mode
+### 2、 Building in Release Mode
 
 There are two approaches to building in release mode: build an unsigned package in release mode and then manually sign and align the package, or allow the build script to sign and align the package for you.
 
-### 1. Build unsigned and aligned
+##### 1. Build unsigned and aligned
 
 ```
+// 导入gradle的编译android的控件
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 19
+    compileSdkVersion 19 // sdk代码版本，高版本会提示遗弃的方法
     buildToolsVersion "19.0.0"
     // buildToolsVersion should be higher or equal to compileSdkVersion
 
@@ -58,6 +60,24 @@ android {
         versionName "1.0"
     }
     
+    signingConfigs {
+        releaseMy {
+            storeFile file("myreleasekey.keystore")
+            storePassword "password"
+            keyAlias "MyReleaseKey"
+            keyPassword "password"
+            
+            // 从环境变量获取            
+            storePassword System.getenv("KSTOREPWD")
+            keyPassword System.getenv("KEYPWD")
+            
+            // 从console获取
+            storePassword System.console().readLine("\nKeystore password: ")
+            keyPassword System.console().readLine("\nKey password: ")
+        }
+    }
+    
+    // 编译不同的版本app，比如free和paid版本，他们有common模块也有不同的模块
     // 编译时将会同时编译两个apk出来
     // 将会覆盖defaultConfig里的值
     // 创建不同的flavor代码，目录结构src/main和src/free,子目录相同
@@ -73,6 +93,8 @@ android {
         }
     }
 
+	// 开发周期不同阶段编译，比如debug时用debug keystore签名，release包可以shrink并用release keystore签名
+	// 至少定义一个buildtype，Studio默认创建debug和release
 	// 执行编译命令的时候gradlew assembleCustom编译custom
 	// gradlew assemblerelease编译release
 	// 都将编译出pro和free两个包
@@ -81,14 +103,38 @@ android {
         release {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rulse.pro'
+            
+            signingConfig signingConfigs.releaseMy // 使用releaseMy的配置
+            
+            
+            resConfigs "en", "fr" //只使用en和fr的language
         }
-       
-        // debug，alpha， beta
         
-        custom {
-            applicationIdSuffix ".custom"
+        
+        // 也可以是debug，alpha， beta
+       	jnidebug {
+
+            // debug配置的一份copy，接着下面的定义会覆盖debug里的参数
+            initWith debug
+
+            applicationIdSuffix ".jnidebug"
+            jniDebuggable true
         }
+        
     }
+    
+    dependencies {
+    // The 'compile' configuration tells Gradle to add the dependency to the
+    // compilation classpath and include it in the final package.
+
+    // Dependency on the "mylibrary" module from this project
+    compile project(":mylibrary")
+
+    // Remote binary dependency
+    compile 'com.android.support:appcompat-v7:23.4.0'
+
+    // Local binary dependency
+    compile fileTree(dir: 'libs', include: ['*.jar'])
 }
 
 dependencies {
@@ -117,7 +163,7 @@ For projects that do not define any flavors, the build system uses the defaultCo
 4. manifest合并修改语法：http://developer.android.com/tools/building/manifest-merge.html#markers-selectors
 
 
-### 2. Build signed and aligned
+##### 2. Build signed and aligned
 
 
 ```
@@ -160,17 +206,7 @@ To have the build process prompt you for these passwords if you are invoking the
 ***Output***    
 This creates your Android application .apk file inside the module build/ directory, named <your_module_name>-release.apk. This .apk file has been signed with the private key specified in build.gradle file and aligned with zipalign. It's ready for installation and distribution.
 
-
-## 四、 Signing Considerations
-
-1. ***App upgrade***    
-The system allows the update if the certificates match. If you sign the new version with a different certificate, you must assign a different package name to the application—in this case, the user installs the new version as a completely new application.
-2. ***App modularity***    
-Android ***allows apps signed by the same certificate to run in the same process***, if the applications so requests, so that the system treats them as a single application. In this way you can deploy your app in modules, and users can update each of the modules independently.
-3. ***Code/data***    
-By signing multiple apps with the same certificate and using signature-based permissions checks, your apps can share code and data in a secure manner.
-
-## 五、 Signing App Manually
+## 三、 Signing App Manually
 
 1. Generate a private key using keytool
 
@@ -190,7 +226,163 @@ By signing multiple apps with the same certificate and using signature-based per
 		
 zipalign ensures that all uncompressed data starts with a particular byte alignment relative to the start of the file, which reduces the amount of RAM consumed by an app.对齐资源文件、数据文件，在访问的时候可以节省内存，加快效率。
 
-## 六、 Apps Over 64k Methods
+
+## 四、 Signing Considerations
+
+1. ***App upgrade***    
+The system allows the update if the certificates match. If you sign the new version with a different certificate, you must assign a different package name to the application—in this case, the user installs the new version as a completely new application.
+2. ***App modularity***    
+Android ***allows apps signed by the same certificate to run in the same process***, if the applications so requests, so that the system treats them as a single application. In this way you can deploy your app in modules, and users can update each of the modules independently.
+3. ***Code/data***    
+By signing multiple apps with the same certificate and using signature-based permissions checks, your apps can share code and data in a secure manner.
+
+
+
+## 五、 Merge Manifest File
+
+### 1. Priority
+
+High -> Low:    
+
+1. buildTypes manifest file
+2. productFlavors manifest file
+3. src/main
+4. dependencies and libraries manifest file
+
+### 2. Merge Rules
+
+| High Priority 	| Low Priority 	| merge Result |
+|-|-|-|
+| 无值				| 无值			| 无值		|
+| 无值				| default		| default	|
+| 无值				| non-def		| non-def	|
+||||
+| def				| 无值			| def		|
+| def				| default		| default	|
+| def				| non-def		| non-def	| 
+||||
+| non-def			| 无值			| non-def	|
+| non-def			| default		| non-def	|
+| non-def			| non-def		| Merge if settings match, otherwise causes conflict error.	|
+
+***Note***    
+
+1. manifest的元素只合并该元素的子元素；
+2. intent-filter只会添加到common父节点，不会合并；
+3. library的minSdkVersion大于高优先级的设置，则无法合并；除非手动指定overrideLibrary；
+
+### 3. Merge Gramma
+
+可以解决library的minSdkVersion大于高优先级的manifest的设定时候无法合并的问题；
+
+##### 1. Keywords
+
+1. merge 默认合并
+2. replace 高优先级替换低优先级
+3. strict 设定的属性值必须相同，否则build报错
+4. merge-only 只合并低优先级
+5. remove 移除指定节点
+6. remove-all 移除相同节点下所有低优先级属性
+
+
+```
+<application
+	android:icon="@drawable/icon"
+	android:label="@string/app_name"
+	tools:replace="icon, label">
+	
+// 覆盖低优先级的android:targetSdkVersion，android:minSdkVersion
+<uses-sdk android:targetSdkVersion="22" android:minSdkVersion="2"
+tools:overrideLibrary="com.example.lib1, com.example.lib2"/>
+     
+// 移除com.example.lib1的这个权限
+<permission
+android:name="permissionOne"
+tools:node="remove"
+tools:selector="com.example.lib1">
+```
+
+##### 2. 注入变量applicationId
+
+Manifest entry:
+
+```
+<activity android:name=".Main">
+    <intent-filter>
+        <action android:name="${applicationId}.foo"></action>
+    </intent-filter></activity>
+```
+
+Gradle build file:
+
+```
+android {
+    compileSdkVersion 22
+    buildToolsVersion "22.0.1"
+
+    productFlavors {
+        flavor1 {
+            applicationId = "com.mycompany.myapplication.productFlavor1"
+        }
+    }
+
+```
+
+##### 3. 注入其他属性
+
+Manifest entry:    
+
+```
+<activity android:name=".MainActivity" android:label="${activityLabel}" >
+```
+
+Gradle build file:
+
+```
+android {
+    defaultConfig {
+        manifestPlaceholders = [ activityLabel:"defaultName"]
+    }
+    productFlavors {
+        free {
+        }
+        pro {
+            manifestPlaceholders = [ activityLabel:"proName" ]
+        }
+    }
+```
+
+## 六、 Improve build times by configuring DEX resources
+
+1. build.gradle 配置Dex编译项
+
+	```
+	android {
+	  ...
+	  dexOptions {
+	    maxProcessCount 4 // this is the default value
+	    javaMaxHeapSize "2g" // 2m 2k单位
+	  }
+	}
+	```
+
+	1. maxProcessCount：设置可以同时启动的Dex Process数量；./gradlew --stop可以停掉以启动的gradle进程；
+	2. javaMaxHeapSize：Dex操作可以分配的最大内存；    
+	
+	***Note***    
+	但是并不是分配的越大越好，越大反而会越慢。要多次设置调试观察build时间。
+
+2. gradle.properties 设置Dex－in－process
+
+	```
+	org.gradle.jvmargs = -Xmx2048m // def 2G，如果设置了javaMaxHeapSize，这里的值设置为javaMaxHeapSize＋1024M
+	```
+
+	1. Incremental Java compilation：默认开启，只变异变动的java files；
+	2. Dex-in-process可以不单单是加快incremental build过程，实际上可以加快整个build过程
+
+
+## 七、 Apps Over 64k Methods
 
 1. ***Build Error:***
 
@@ -208,18 +400,37 @@ zipalign ensures that all uncompressed data starts with a particular byte alignm
 	You may try using --multi-dex option.
 	```
 
-1. 一个dalvik里能引用的方法数上限65536个。Android application (APK) files contain executable bytecode files in the form of Dalvik Executable (DEX) files；The Dalvik Executable specification ***limits the total number of methods that can be referenced within a single DEX file to 65,536***, including Android framework methods, library methods, and methods in your own code. ***Getting past this limit requires that you configure your app build process to generate more than one DEX file***, known as a multidex configuration. 
+1. 一个dalvik里能引用的方法数上限65536（65,536＝64 X 1024，又称64k reference limit）个。Android application (APK) files contain executable bytecode files in the form of Dalvik Executable (DEX) files；The Dalvik Executable specification ***limits the total number of methods that can be referenced within a single DEX file to 65,536***, including Android framework methods, library methods, and methods in your own code. ***Getting past this limit requires that you configure your app build process to generate more than one DEX file***, known as a multidex configuration. 
 
 2. Solution:    
-http://developer.android.com/tools/building/multidex.html#about
+[Multi-dex配置及项目优化](http://developer.android.com/tools/building/multidex.html#about)
 
-## 七、 Install And Execute
+## 八、 Install And Execute
 
 1. APK打包的是dex文件。
 2. 安装分为两种情况：
 
 	1. Dalvik＋JIT：安装时JIT解析dex文件为odex，dex和odex其实都是Dalvik可以解析的字节码，Dalvik在apk运行时把Dalvik字节码解析为本机机器码执行。解析成odex，运行时dalvik不必每次都从apk中提取dex，速度加快了。但是odex因为字节对齐会比dex扩大1～4倍。
-	2. ART+AOT：安装时AOT解析dex文件为aot文件，但是命名为odex文件。这里的odex文件本质时elf文件，其中都是本机机器码。
+	2. ART+AOT：安装时AOT解析dex文件为aot文件，但是命名为odex文件。这里的odex文件本质是elf文件，其中都是本机机器码。
 	
 3. JIT: just-in-time
 4. AOT: ahead-of-time，类似于C语言编译时便确定了可执行环境的机器码。
+
+## 九、 Instant Run
+
+### 1. Require
+
+1. Gradle version 2.0.0 or higher
+2. minSdkVersion to 15 or higherb
+
+### 2. 4 Level
+
+1. hot swap: 只修改了method时最快，可以不重启activity，但是studio会帮你重启
+2. warm swap: 改变或者删除资源文件，需要重启activity
+3. cold swap: API 21以上需要重启app，以下需要build一个新的apk
+4. new deploy: 只要改变了manifest，都需要重新编译apk。所以在build.gradle的debug type下不要动态update manifest文件
+
+### 3. Configure Instatn Run
+
+1. Open the Settings or Preferences dialog.
+2. Navigate to Build, Execution, Deployment > Instant Run and click Update Project,
