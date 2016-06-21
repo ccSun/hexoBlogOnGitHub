@@ -1,11 +1,11 @@
-title: Android-Proguard
+title: Android-Shrink-Code-And-Resources
 categories:
   - Android
 tags:
-  - Tools
+  - Optimization
 date: 2015-09-15 22:28:02
 ---
-Proguard的开启和相关语法。Progurad可以做到code shrinking，与此同时我们也可以打开resource shrinking
+Progurad可以做到code shrinking，减少包的大小，也可以避免64k references limit的问题。与此同时我们也可以打开resource shrinking。
 
 
 1. 优化方式：移除二进制bytecode中未使用的classes/fields/methods;删除bytecode中的debuging info(文件名，行数，方法名变量名等)，模糊重命名类、变量和方法；也可以帮助比避免64k reference limit的问题。
