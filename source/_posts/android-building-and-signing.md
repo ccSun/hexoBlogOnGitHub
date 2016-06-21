@@ -148,12 +148,14 @@ dependencies {
 
 2. Source directories
 To build each version of your app, the build system combines source code and resources from:
+
 	* src/main/ - the main source directory (the default configuration common to all variants)
 	* src/<buildType>/ - the source directory
 	* src/<productFlavor>/ - the source directory
 	
-The build type and product flavor source directories are optional.    
+	The build type and product flavor source directories are optional.    
 For projects that do not define any flavors, the build system uses the defaultConfig settings:
+
 	* src/main/ (default configuration)
 	* src/release/ (build type)
 	* src/debug/ (build type)
@@ -403,7 +405,10 @@ android {
 1. 一个dalvik里能引用的方法数上限65536（65,536＝64 X 1024，又称64k reference limit）个。Android application (APK) files contain executable bytecode files in the form of Dalvik Executable (DEX) files；The Dalvik Executable specification ***limits the total number of methods that can be referenced within a single DEX file to 65,536***, including Android framework methods, library methods, and methods in your own code. ***Getting past this limit requires that you configure your app build process to generate more than one DEX file***, known as a multidex configuration. 
 
 2. Solution:    
-[Multi-dex配置及项目优化](http://developer.android.com/tools/building/multidex.html#about)
+
+
+[
+Multi-dex配置及项目优化](http://developer.android.com/tools/building/multidex.html#about)
 
 ## 八、 Install And Execute
 
