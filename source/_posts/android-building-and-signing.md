@@ -390,33 +390,106 @@ android {
 
 	* Earlier versions of the build system report this error as follows
 	
-	```
-	Conversion to Dalvik format failed:
-	Unable to execute dex: method ID not in [0, 0xffff]: 65536
-	```
+		```
+		Conversion to Dalvik format failed:
+		Unable to execute dex: method ID not in [0, 0xffff]: 65536
+		```
 	* More recent versions of the Android build system display a different error
 	
-	```
-	trouble writing output:
-	Too many field references: 131000; max is 65536.
-	You may try using --multi-dex option.
-	```
+		```
+		trouble writing output:
+		Too many field references: 131000; max is 65536.
+		You may try using --multi-dex option.
+		```
 
-1. 一个dalvik里能引用的方法数上限65536（65,536＝64 X 1024，又称64k reference limit）个。Android application (APK) files contain executable bytecode files in the form of Dalvik Executable (DEX) files；The Dalvik Executable specification ***limits the total number of methods that can be referenced within a single DEX file to 65,536***, including Android framework methods, library methods, and methods in your own code. ***Getting past this limit requires that you configure your app build process to generate more than one DEX file***, known as a multidex configuration. 
+1. 一个dalvik里能引用的方法数量上限65536（65,536＝64 X 1024，又称64k reference limit）个。Android application (APK) files contain executable bytecode files in the form of Dalvik Executable (DEX) files；The Dalvik Executable specification ***limits the total number of methods that can be referenced within a single DEX file to 65,536***, including Android framework methods, library methods, and methods in your own code. ***Getting past this limit requires that you configure your app build process to generate more than one DEX file***, known as a multidex configuration. 
 
 2. Solution:    
+	
+	1. 对引入的大dependency进行简化，去掉不必要的代码
+	2. 用progurad移除不必要的代码
 
+3. 打开multi-dex:
 
-[
-Multi-dex配置及项目优化](http://developer.android.com/tools/building/multidex.html#about)
+	1. build.gradle 
+	
+		```
+        android {
+            compileSdkVersion 21
+            buildToolsVersion "21.1.0"
+
+            defaultConfig {
+            ...
+            minSdkVersion 14
+            targetSdkVersion 21
+            ...
+
+            // Enabling multidex support.
+            multiDexEnabled true
+            }
+            ...
+        }
+
+        dependencies {
+            compile 'com.android.support:multidex:1.0.0'
+        }
+		```
+	
+	2. manifest
+	
+		```
+		<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+            package="com.example.android.multidex.myapplication">
+            <application
+                ...
+          		 android:name="android.support.multidex.MultiDexApplication">
+                ...
+            </application>
+        </manifest>
+		```
+
+***Note:***
+1. 5.0 API21 以前，是dalvik，默认单dex，会有64k reference limit问题；
+2. 5.0及以后，是aot，默认就支持多dex。
+
+4. Multi-dex局限性
+
+会有ANR，Crash等问题。
+
+5. 优化Multi-dex编译
+
+打开multi-dex会增加编译时间，因为build process需要决定哪些方法放在第一个dex，哪些在第二个。通过多个flavor，来调整一下在debug和发布生产包时候的时间。
+
+```
+android {
+    productFlavors {
+        // Define separate dev and prod product flavors.
+        dev {
+        	// api 21 使用ART，能更快的编译multi-dex
+            // dev utilizes minSDKVersion = 21 to allow the Android gradle plugin
+            // to pre-dex each module and produce an APK that can be tested on
+            // Android Lollipop without time consuming dex merging processes.
+            minSdkVersion 21
+        }
+        prod {
+            // The actual minSdkVersion for the application.
+            minSdkVersion 14
+        }
+    }
+}
+```
+此时设置buildType为devDebug，那么在debug时可以节省很多时间。（Studio左侧弹出设置窗口，或者在Build－>Select Build Variant弹出）
+
+6. [Test Multi-dex](https://developer.android.com/studio/build/multidex.html#testing)
+
 
 ## 八、 Install And Execute
 
 1. APK打包的是dex文件。
 2. 安装分为两种情况：
 
-	1. Dalvik＋JIT：安装时JIT解析dex文件为odex，dex和odex其实都是Dalvik可以解析的字节码，Dalvik在apk运行时把Dalvik字节码解析为本机机器码执行。解析成odex，运行时dalvik不必每次都从apk中提取dex，速度加快了。但是odex因为字节对齐会比dex扩大1～4倍。
-	2. ART+AOT：安装时AOT解析dex文件为aot文件，但是命名为odex文件。这里的odex文件本质是elf文件，其中都是本机机器码。
+	1. Dalvik＋JIT：Android 5.0 API 21以前的版本，安装时JIT解析dex文件为odex，dex和odex其实都是Dalvik可以解析的字节码，Dalvik在apk运行时把Dalvik字节码解析为本机机器码执行。解析成odex，运行时dalvik不必每次都从apk中提取dex，速度加快了。但是odex因为字节对齐会比dex扩大1～4倍。
+	2. ART+AOT：Android 5.0 API 21及以后的版本，安装时AOT解析dex文件为aot文件，但是命名为odex文件。这里的odex文件本质是elf文件，其中都是本机机器码。
 	
 3. JIT: just-in-time
 4. AOT: ahead-of-time，类似于C语言编译时便确定了可执行环境的机器码。
@@ -426,7 +499,7 @@ Multi-dex配置及项目优化](http://developer.android.com/tools/building/mult
 ### 1. Require
 
 1. Gradle version 2.0.0 or higher
-2. minSdkVersion to 15 or higherb
+2. minSdkVersion to 15 or higher，最优性能是minSdkVersion 21 Android 5.0及以上。因为在打开multi-dex的时候，instant run有可能会被关闭(参考[Multidex support prior to Android 5.0](https://developer.android.com/studio/build/multidex.html))。
 
 ### 2. 4 Level
 
