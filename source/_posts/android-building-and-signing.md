@@ -374,7 +374,7 @@ android {
 	***Note***    
 	但是并不是分配的越大越好，越大反而会越慢。要多次设置调试观察build时间。
 
-2. gradle.properties 设置Dex－in－process
+2. gradle.properties 设置Dex-in-process
 
 	```
 	org.gradle.jvmargs = -Xmx2048m // def 2G，如果设置了javaMaxHeapSize，这里的值设置为javaMaxHeapSize＋1024M
