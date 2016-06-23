@@ -7,7 +7,7 @@ tags:
   - Monitor
 date: 2016-01-18 16:33:10
 ---
-DDMS的介绍及各个tool的使用。
+DDMS的介绍及各个tool的使用。本文介绍内容结合Android-Performance-Profiling。
 
 ## 一、 DDMS
 Dalvik Debug Monitor Server (DDMS)。
@@ -51,15 +51,9 @@ The DDMS "base port" (8700, by default). The base port is a port forwarder, whic
     
 ### 1. Logcat
 ### 2. Memory Monitor
-* Show a graph of available and allocated memory over time.
-* Show garbage collection (GC) events over time.
-* Initiate garbage collection events.
-* Quickly test whether app slowness might be related to excessive garbage collection events.
-* Quickly test whether app crashes may be related to running out of memory.   
-
-Dump memory 后参数说明：    
-developer.android.com/tools/help/am-memory.html#tracking
-
+参考Android-Performance-Profiling
 ### 3. CPU Monitor
+参考Android-Performance-Profiling
 ### 4. GPU Monitor
+参考Android-Performance-Profiling
 ### 5. Network Monitor

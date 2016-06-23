@@ -5,27 +5,56 @@ tags:
 	- Optimization
 date: 2016-03-30 15:52:25
 ---
-性能优化工具介绍及使用。
+性能优化工具介绍及使用。    
+要显示一个像素，需要4个阶段：（1）CPU完成计算（2）GPU完成渲染（3）内存存储图像像素（4）Battery提供电源。每一个都可能达到瓶颈。要优化，要从多方面开始。
 
-## 一、 Performance Profiling Tools
+***Note:***
 
-Putting pixels on the screen involves four primary pieces of hardware. 
+在优化的时候，关闭Instant Run。它会造成性能影响。
 
-1. the CPU computes display lists
-2. the GPU renders images to the display
-3. the memory stores images and data
-4. the battery provides electrical power
 
-Each of these pieces of hardware has constraints; pushing or exceeding those constraints causes your app to be slow, have bad display performance, or exhaust the battery. 
 
-### 1. Traceview 
-### 2. Systrace
+## 一. CPU优化
 
-## 二、 Compute Analysis Tools
+### 1. CPU Monitor
 
-## 三、 Rendering Analysis Tools
+集成在Android Monitor，可以看user mode和kernel mode分别占用的CPU比例。
 
-### 1. Debug GPU Overdraw
+### 2. Method Trace
+
+##### 1. 使用方式
+
+1. 打开DDMS，在左侧面板上面Start Method Profling，然后再次点击就Stop；
+2. 嵌入代码精准定位
+	
+	```
+	android.os.Debug.startMethodTracing(“tracefilename”);
+	android.os.Debug.stopMethodTracing();
+	
+	// adb pull /sdcard/test.trace /tmp 取出trace文件
+	```
+	
+##### 2. 参数简介
+
+1. Incl Cpu Time : 方法本身代码和子方法时间总数；
+2. Excl Cpu Time : 方法本身代码执行时间；不包括子方法；
+3. Calls + Recur : 调用次数和递归调用次数；
+4. Cpu Time/Call : 方法每次调用占用CPU的时间；
+5. Real Time : 方法执行完总花费时间，因为有cpu调度消费，比Cpu Time要多；
+
+##### 3. 重点关注
+
+1. 调用次数少，每次花费时间多的；
+2. 调用次数多的；
+
+
+## 二、GPU优化
+
+### 1. GPU Monitor
+ 
+集成在Android Monitor，绿色横线60frames/秒的标准线，红色线30frames/秒的标准线。
+
+### 2. OverDraw
 
 ##### 1. Enable in Developer Options
 ##### 2. Color:
@@ -36,11 +65,15 @@ Each of these pieces of hardware has constraints; pushing or exceeding those con
 * Pink: overdraw three times
 * Red: overdraw four or more times
 
+#### 3. 优化方式
+参考Android-Improving-Layout-Performance
+
 ### 2. Profiling GPU Rendering
 
-#### 1. Enable in Developer Options : Profile GPU Rendering
+##### 1. Enable in Developer Options : Profile GPU Rendering
+
 ##### 2. 原理：
-大多数卡顿是因为渲染性能问题。Android每16ms发送VSYNC信号对UI进行渲染，每次渲染即为一帧。如果16ms内没有绘制完，比如在20ms绘制完，则实际上用户在32ms内看到一帧，丢失一帧显示。丢帧太多，就会卡顿。所以要尽量保证所有的操作在16ms内完成。    
+大多数卡顿是因为渲染性能问题。Android每16ms发送VSYNC信号对UI进行渲染，每次渲染即为一帧。如果16ms内没有绘制完，比如在20ms绘制完，则实际上用户在32ms内看到一帧，丢失一帧显示。丢帧太多，就会卡顿。所以要尽量保证所有的操作在16ms内完成。在Android Monitor里的GPU Monitor的红线上可以看到地狱30frames的渲染。
 ##### 3. 为什么16ms？
 人视觉产生连续效果需要达到基本的24fps，电影一般用这个帧数。60fps是人眼能感受到的最快的变化，超过60fps是不必要的。为了达到60fps，即需要16ms绘制一帧。    
 每16ms刷新一次的刷新频率，60fps的帧频率，如果刚好匹配，则完美工作。实际上很难刚好保证同步。
@@ -57,12 +90,25 @@ Each of these pieces of hardware has constraints; pushing or exceeding those con
 	* 红色：OpenGL渲染图像花费的时间
 	* 黄色：CPU等待GPU绘制结束花费的时间，如果过长，说明GPU工作很多。CPU发送cmd给GPU后，需要等过长时间才能发送新的cmd，会导致黄色很长。
  
-### 3. Hierarchy Viewer
-The Hierarchy Viewer tool visualizes your ***app's view hierarchy*** and ***profiles the relative rendering speed for each view***. 
+## 三、Battery优化
+～～～ 没研究。
 
-1. 但是。。不会用。我咔咔咔。下面这里也没看懂怎样就是有问题，怎样去优化
-http://developer.android.com/tools/performance/hierarchy-viewer/profiling.html
- 
+## 四、内存优化
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ## 四、 Memory Analysis Tools
 通过Memory Monitor观察到频繁的GC，用Heap Viewer看一下对象类型，用Allocation Tracker找到问题代码位置。
 

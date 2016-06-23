@@ -205,7 +205,7 @@ To have the build process prompt you for these passwords if you are invoking the
 	keyPassword System.console().readLine("\nKey password: ")
 ```
 
-***Output***    
+***Output:***    
 This creates your Android application .apk file inside the module build/ directory, named <your_module_name>-release.apk. This .apk file has been signed with the private key specified in build.gradle file and aligned with zipalign. It's ready for installation and distribution.
 
 ## 三、 Signing App Manually
@@ -511,4 +511,8 @@ android {
 ### 3. Configure Instatn Run
 
 1. Open the Settings or Preferences dialog.
-2. Navigate to Build, Execution, Deployment > Instant Run and click Update Project,
+2. Navigate to Build, Execution, Deployment > Instant Run and click Update Project.
+
+***Note:***
+
+性能优化的时候关闭Instant Run，因为会造成性能影响。
