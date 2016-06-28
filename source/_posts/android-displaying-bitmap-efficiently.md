@@ -2,6 +2,7 @@ title: Android-Displaying-Bitmap-Efficiently
 categories:
 	- Android
 tags:
+	- Memory
 	- Optimization
 date: 2015-12-11 18:31:43
 ---

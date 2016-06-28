@@ -2,10 +2,7 @@ title: Android-Code-Tools
 categories:
   - Android
 tags:
-  - Lint
-  - Annotations
   - Optimization
-  - Tools
 date: 2015-07-30 17:20:08
 ---
 Lint检查潜在错误、优化；Annotations优化参数定义，增加可读性。

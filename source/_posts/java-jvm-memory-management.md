@@ -2,7 +2,7 @@ title: JVM-Memory-Management
 categories:
   - Java
 tags:
-  - JVM
+  - Memory
 date: 2015-12-09 16:22:28
 ---
 JVM虚拟机的介绍以及Java内存分配管理内容。

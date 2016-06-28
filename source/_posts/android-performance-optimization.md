@@ -1,16 +1,16 @@
-title: Android-Performance-Tools
+title: Android-Performance-Optimization
 categories:
 	- Android
 tags:
 	- Optimization
 date: 2016-03-30 15:52:25
 ---
-性能优化工具介绍及使用。    
-要显示一个像素，需要4个阶段：（1）CPU完成计算（2）GPU完成渲染（3）内存存储图像像素（4）Battery提供电源。每一个都可能达到瓶颈。要优化，要从多方面开始。
+ 
+要显示一个像素，需要4个阶段：（1）CPU完成计算（2）GPU完成渲染（3）内存存储图像像素（4）Battery提供电源。每一个都可能达到瓶颈。要优化，可以从CPU、GPU、内存、网络、Battery多方面开始。
 
 ***Note:***
 
-在优化的时候，关闭Instant Run。它会造成性能影响。
+在优化的时候，关闭Instant Run。它会造成性能影响。关闭方式：Android Studio －> Preference -> Build，Execution，Deployment -> Instant。
 
 
 
@@ -93,65 +93,27 @@ date: 2016-03-30 15:52:25
 ## 三、Battery优化
 ～～～ 没研究。
 
-## 四、内存优化
+## 四、网络优化
+DDMS和Android Monitor都可以打开监控面板。
+
+## 五、内存优化
+
+1. 通过Memory Monitor观察GC频率同时可在logcat看到gc的原因，也可查看占用内存增长趋势；
+2. 用Heap Viewer看一下对象类型，用Allocation Tracker找到问题代码位置；
+3. Dump java heap后，用面板右侧的Analyzer Tasks分析下内存泄漏和重复定义的string对象；
+
+更多参考***[Android-Managing-Memory](http://ccsun.github.io/2015/11/29/android-managing-memory/)***
+
+## 六、彩蛋：DDMS
+
+Dalvik Debug Monitor Server (DDMS)。
+
+* every application runs in its own process,
+* every process runs in its own virtual machine (VM).
+* every VM exposes a unique port that a debugger can attach to.
 
 
+DDMS assigns a debugging port to each VM on the device. 8600 for the first VM, the next on 8601.    
+The DDMS "base port" (8700, by default). The base port is a port forwarder, which can accept VM traffic from any debugging port and forward it to the debugger on port 8700. 
 
 
-
-
-
-
-
-
-
-
-
-
-
-## 四、 Memory Analysis Tools
-通过Memory Monitor观察到频繁的GC，用Heap Viewer看一下对象类型，用Allocation Tracker找到问题代码位置。
-
-### 1. MemoryMonitor
-
-##### 1. 查看内容
-
-1. free和allocated的内存
-2. 查看GC garbage collection的频率是否正常，频繁gc导致性能问题。
-3. 是否内存溢出导致crash
-4. 看看是否有内存泄漏
-
-### 2. Heap Viewer
-
-Android Monitor和DDMS里都有。
-
-＃#### 1. 查看内容
-1. 查看分配内存的对象，数量及占内存大小
-2. 查看不必要分配的内存对象，检查内存泄漏
-
-### 3. Allocation Tracker
-
-1. 可以帮助找到问题代码的位置。
-
-##### 1. 查看内容
-
-
-### 4. Investigating Your RAM Usage
-
-#####  1. Interpreting Dalvik Log Messages
-
-1. GC Reason
-	* ***GC_CONCURRENT***
-    A concurrent GC that frees up memory as your heap begins to fill up.
-	* ***GC_FOR_MALLOC***    
-    A GC caused because your app attempted to allocate memory when your heap was already full, so the system had to stop your app and reclaim memory.
-	* ***GC_HPROF_DUMP_HEAP***    
-    A GC that occurs when you request to create an HPROF file to analyze your heap.
-	* ***GC_EXPLICIT***    
-    An explicit GC, such as when you call gc() (which you should avoid calling and instead trust the GC to run when needed).
-
-##### 2. ART Log Message
-
-http://developer.android.com/tools/debugging/debugging-memory.html#LogMessages
-
-## 五、 Battery Analysis Tools

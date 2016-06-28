@@ -2,7 +2,6 @@ title: Android-Tools
 categories:
   - Android
 tags:
-  - Tools
   - Optimization
 date: 2015-07-09 09:40:09
 ---
