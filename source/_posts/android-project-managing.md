@@ -87,33 +87,29 @@ Files that you save here are compiled into an .apk file as-is, and the original 
 
 ### 1. Convert an app module to a library module
 
-Open the ***build.gradle*** modify  
-  
-```
-apply plugin: 'com.android.application'
-```    
+Open the ***build.gradle*** set this:    
 
-to   
- 
 ```
-apply plugin: 'com.android.library'
+	apply plugin: 'com.android.library'   
 ```
+
 
 ### 2. Add library module
-
-Add ***settings.gradle***    
-
-```
-include ':app', ':my-library-module'
-```    
-Add ***build.gradle***    
+    
+Add to ***settings.gradle***    
 
 ```
-dependencies {
-    compile project(":my-library-module")
-}
+	include ':app', ':my-library-module'    
 ```
-
+    
+Add to ***build.gradle***    
+    
+```
+	dependencies {
+		compile project(":my-library-module")
+	}
+```
+    
 ### 3. Consideration
 
 When you build an application that depends on a library module, the SDK tools ***compile the library into a temporary JAR file*** and use it in the main module, ***then uses the result to generate the .apk***
