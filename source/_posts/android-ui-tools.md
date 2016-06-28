@@ -2,7 +2,7 @@ title: Android-Ui-Tools
 categories:
   - Android
 tags:
-  - Tools
+  - UI
 date: 2015-08-28 19:06:05
 ---
 有关UI操作的tool：Layout Editor，Theme Editor，Translations Editor，Vector Asset Studio，Image Asset Studio。

@@ -127,10 +127,10 @@ When you build an application that depends on a library module, the SDK tools **
 3.  can include an external jar lib into a lib module;
 
 	```
-	    <uses-library   	
-      		android:name="string"   
-      		android:required=["true" | "false"] 
-      		/>
+	<uses-library   	
+    	android:name="string"   
+    	android:required=["true" | "false"] 
+    	/>
 	```
 
 ***Resource conflicts***    
