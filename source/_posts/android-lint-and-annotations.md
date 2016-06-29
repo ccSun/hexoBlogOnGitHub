@@ -10,13 +10,17 @@ Lint检查潜在错误、优化；Annotations优化参数定义，增加可读�
 ## 一、 Lint
 The Lint tool is a static code analysis tool that checks your Android project source files for potential bugs and optimization improvements.
 
-启动： Analyze -> Inspect codes.    
+启动： Analyze -> Inspect codes;也可以配置在build.gradle;    
 配置： File -> Settings -> Project Settings
 
 ***检查的内容：***
 
 1. XML resource files contain unused namespaces
 2. 使用的deprecated elements or API
+
+***Note:***
+可以[配置lint.xml](https://developer.android.com/studio/write/lint.html)来客制化规则检查规则。
+
 
 ## 二、 Annotations
 

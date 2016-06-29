@@ -51,13 +51,38 @@ The activity is completely obscured by another activity (the activity is now in 
 	* receiver
 
 4. 内存不足时，会回调onLowMemory()/onTrimMemory()释放ui显示使用的图片、数组、缓存等资源。
-
-	* onLowMemory() 被回调时，已经没有后台进程(优先级为background的进程)，是在最后一个后台进程被杀时调用，一般情况是low memory killer 杀进程后触发；可以自定义实现ComponentCallbacks的onLowMemory()方法:
+	1. 场景：
+		一般大图片、数组、缓存，如果在onStop时不释放，为了返回时更快显示；但是如果在系统资源不足时，我们要在onTrimMemory(TRIM_MEMORY_MODERATE)等级释放资源，避免进程被杀死。然后在onStart或者onResume时恢复资源；
+	1. 区别：
+		api<14的机器使用onLowMemory，否则都适用onTrimMemory;在onTrimMemory时最常用的level等级是ComponentCallbacks2.TRIM_MEMORY_MODERATE;    
 		
+		* onLowMemory() 被回调时，已经没有后台进程(优先级为background的进程)，是在最后一个后台进程被杀时调用，一般情况是low memory killer 杀进程后触发；可以自定义实现ComponentCallbacks的onLowMemory()方法:
+		
+			```
+			Acitivity.registerComponentCallbacks(callBack);
+			```
+		* onTrimMemory(int) 在android 4.0之后新增，onTrimMemory被回调时，还有后台进程，触发更频繁，每次计算进程优先级时，只要满足条件，都会触发）。先调用onStop()时，不用释放ui资源，因为用户有可能返回；参数是优先级，不同的级别区分；
+		
+	2. 实现组件：
+		* Application.onTrimMemory()
+		* Activity.onTrimMemory()
+		* Fragement.OnTrimMemory()
+		* Service.onTrimMemory()
+		* ContentProvider.OnTrimMemory()
+		
+	3. 参考案例：    
+	
 		```
-		Acitivity.registerComponentCallbacks(callBack);
+		@Override
+		public void onTrimMemory(int level) {
+    		super.onTrimMemory(level);
+    		if (level >= ComponentCallbacks2.TRIM_MEMORY_MODERATE) {
+        		mAppsCustomizeTabHost.onTrimMemory();
+    		}
+		}
 		```
-	* onTrimMemory(int) 在android 4.0之后新增，onTrimMemory被回调时，还有后台进程，触发更频繁，每次计算进程优先级时，只要满足条件，都会触发）。先调用onStop()时，不用释放ui资源，因为用户有可能返回；参数是优先级，不同的级别区分；
+	
+
 
 ### 5. Start/Restart Your Activity
 

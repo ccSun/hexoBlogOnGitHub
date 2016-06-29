@@ -44,8 +44,8 @@ Android项目目录基本配置和管理，以及icon及其size。
 Contains code for instrumentation tests that run on an Android device. For more information, see the [Android Test documentation](https://developer.android.com/studio/test/index.html).    
 1. **test**    
 Contains code for local tests that run on your host JVM.    
-1. **main/AndroidManifest**   
-    
+1. **main/AndroidManifest**
+   
     ```
 		<uses-sdk
 			android:minSdkVersion=""
@@ -62,8 +62,7 @@ Contains code for local tests that run on your host JVM.
 			<receiver
 			<provider
 	```
-				
-3. **main/java**  
+3. **main/java**
 4. **main/jni**    
 [Java Native Interface](https://developer.android.com/ndk/index.html)
 5. **main/gen**    

@@ -37,6 +37,11 @@ Android sets a hard limit on the heap size for each app. If your app has reached
 
 low memory的时候，会kill LRU least-recently used process.但是也会考虑那些占用内存很大的process。
 
+### 5. Be aware of memory overhead
+
+1. Every class in Java (including anonymous inner classes) uses about 500 bytes of code.
+2. Every class instance has 12-16 bytes of RAM overhead.
+
 ## 二、 How Your App Should Manage Memory
 
 ### 1. Activity、Service组件
@@ -45,23 +50,12 @@ low memory的时候，会kill LRU least-recently used process.但是也会考虑
 
 1. 一个后台运行的service会以服务进程优先级占用ram，从而减少系统在lrucache缓存的process。如非必要，不要运行；完成工作后，一定确保stop。否则会导致leak service。Leaving a service running when it’s not needed is one of the worst memory-management mistakes。
 2. 解决办法：使用***IntentService***，它会在完成工作后销毁自己，即在handleMessage中调用stopSelf()；IntentService原理HandlerThread+Handler实现异步。
+	1. Service不是单独的进程，他在主进程中运行；
+	2. Service不是一个线程，不能执行耗时操作；20s会ANR；
+	3. Service处理耗时操作，需要在service里新建线程；
+	 
 
-##### 2. Release memory when your user interface becomes hidden
-
-当用户exit你的app，即所有的UI组件都hidden的时候，系统回调onTrimMemory();释放有关ui展示的资源:比如图片，文件，动态生成的view等。
-
-可以实现onTrimMemory()的组件:
-
-* Application.onTrimMemory()
-* Activity.onTrimMemory()
-* Fragement.OnTrimMemory()
-* Service.onTrimMemory()
-* ContentProvider.OnTrimMemory()
-
-
-***onTrimMemory()*** : api 14(android 4.0 api 15)之后加入的，callback with ***TRIM_MEMORY_UI_HIDDEN*** only when all the UI components of your app process become hidden from the user.    
-更多level标签：http://developer.android.com/training/articles/memory.html#YourApp    
-***onStop()*** : 在App内跳转也会执行，to release activity resources such as a network connection or to unregister broadcast receivers, you usually should not release your UI resources until you receive onTrimMemory(TRIM_MEMORY_UI_HIDDEN).
+##### 2. Release memory when onTrimLowMemory();参考Android-Activity。
 
 ### 2. BitMap
 
@@ -91,43 +85,47 @@ low memory的时候，会kill LRU least-recently used process.但是也会考虑
 ***instead of HashMap*** which can be quite memory inefficient because it needs a separate entry object for every mapping. 
 
 为何SparseArray要比hashMap要好，both because it avoids
- * auto-boxing keys and its data structure doesn't rely on an extra entry object for each mapping.因为他不需要autoboxing(即将原始类型封装为对象类型，比如把int类型封装成Integer类型）。***当数据量不多(几百)的时候，用SparseArray。但是数据量多hashmap效率较高。***原因是SparseArray存储用了两个数组int[] keys和Object[] values;查找的时候通过二分法查找，添加删除涉及到元素移动。
+ * auto-boxing keys and its data structure doesn't rely on an extra entry object for each mapping.因为他不需要autoboxing(即将原始类型封装为对象类型，比如把int类型封装成Integer类型。往HashMap里push一个元素，会占用32bytes。）。***当数据量不多(几百)的时候，用SparseArray。但是数据量多hashmap效率较高。***原因是SparseArray存储用了两个数组int[] keys和Object[] values;查找的时候通过二分法查找，添加删除涉及到元素移动。
+ 
+##### 2. int > double > float
 
-##### 2. Be aware of memory overhead
+float比int运行速度慢2倍；float和double运行速度差不多，double空间比float大2倍；在desktop开发上，不考虑空间的时候使用double。
 
-1. Enums often require more than twice as much memory as static constants. You should strictly avoid using enums on Android.
-2. Every class in Java (including anonymous inner classes) uses about 500 bytes of code.
-3. Every class instance has 12-16 bytes of RAM overhead.
-4. Putting a single entry into a HashMap requires the allocation of an additional entry object that takes 32 bytes (see the previous section about optimized data containers).
+##### 3. Static Final for constants取代Enum
 
-##### 3. 数组
+Enum占用的空间是常量的2倍，不鼓励使用Enum。
+
+static int VAL = 10; 会通过clinit的初始化方法，保存10到变量VAL中；访问变量的时候通过引用查找变量；
+
+static final VAL = 10; 不会调用clinit方法，使用时会直接使用10的值，速度更快。
+
+##### 4. 数组
 
 1. int[]效率高于Integer[];
 2. 两个并行的数组比一个（int,int）的Object数组好太多；也就是两个ObjA[]和ObjB[]比一个(ObjA,ObjB)[]效率好很多；
 
-##### 4. 注意使用Float
 
-float比int运行速度慢2倍；float和double运行速度差不多，double空间比float大2倍；在desktop开发上，不考虑空间的时候使用double。
+### 4. 方法级别
 
-### 4. 编码Tips
-##### 1. 避免创建不必要的对象
-1. String str = new String("Hello"); 改为 String str = "Hello";
-2. 方法A返回的string一定会append到StringBuffer上，就直接append，不要再创建临时变量；
-3. 循环外定义变量；
-
-##### 2. Static Final for constants
-
-static int VAL = 10; 会通过clinit的初始化方法，保存10到变量VAL中；访问变量的时候通过引用查找变量；
-
-static final VAL = 10; 不会调用clinit方法，使用时会直接使用10的值。
-
-##### 3. 避免internal的get/set
+##### 1. 避免internal的get/set
 
 Internal的get/set在C＋＋，Java，C＃中都是良好的面向对象的编程习惯。但是在Android上，要直接访问变量。Without a JIT, direct field access is about 3x faster than invoking a trivial getter. With the JIT (where direct field access is as cheap as accessing a local), direct field access is about 7x faster than invoking a trivial getter.
 
 Note that if you're using ProGuard, you can have the best of both worlds because ProGuard can inline accessors for you.
 
-##### 4. Use Enhanced For Loop Syntax
+
+##### 2. Be careful with code abstractions
+
+抽象可以更加敏捷和便于维护。然而抽象会有they require a fair amount more code that needs to be executed, requiring more time and more RAM for that code to be mapped into memory. 所以如果抽象并不是具有明显的意义，不要使用。
+
+### 5. 编码习惯
+
+##### 1. 避免创建不必要的对象
+1. String str = new String("Hello"); 改为 String str = "Hello";
+2. 方法A返回的string一定会append到StringBuffer上，就直接append，不要再创建临时变量；
+3. 循环外定义变量；
+
+##### 2. Use Enhanced For Loop Syntax
 
 ```
 int sum = 0;
@@ -136,14 +134,10 @@ int sum = 0;
     }
 
 ```
-##### 5. 使用Lib效率更高
+##### 3. 使用Lib效率更高
 
-String.indexof()
+String.indexof()    
 System.arraycopy()
-
-### 5. Be careful with code abstractions
-
-抽象可以更加敏捷和便于维护。然而抽象会有they require a fair amount more code that needs to be executed, requiring more time and more RAM for that code to be mapped into memory. 所以如果抽象并不是具有明显的意义，不要使用。
 
 ### 6. 引用第三方
 
@@ -174,7 +168,8 @@ The ProGuard tool shrinks, optimizes, and obfuscates your code by removing unuse
 
 An example of when multiple processes may be appropriate is when building a music player that plays music from a service for long period of time. If the entire app runs in one process, then many of the allocations performed for its activity UI must be kept around as long as it is playing music.
 
-***new process***
+***new process***    
+
 ```
 <service android:name=".PlaybackService"
          android:process=":newprocessname" />

@@ -81,6 +81,28 @@ fragmentTransaction.commit();
 5. For each fragment transaction, ***you can apply a transition animation, by calling setTransition() before you commit***.
 ***Caution:*** You can commit a transaction ***using commit() only prior to the activity saving its state*** (when the user leaves the activity). If you attempt to commit after that point, an exception will be thrown. This is because the state after the commit can be lost if the activity needs to be restored. ***For situations in which its okay that you lose the commit, use commitAllowingStateLoss()***.
 
+6. 注意判断fragment的状态,但是最好还是使用replace，减少内存：
+
+	```
+	if(fragment == null || fragment.isRemoving()) {
+    	fragment = new MyFragment();
+    }
+    
+    if (fragment.isAdded()) {
+          transaction.show(fragment);
+
+    } else {
+    	Fragment fragment = mFragmentManager.findFragmentByTag(MY_TAG);
+        //如果add fragment前已经有其它相同类型的fragment， remove it
+        if(fragment != null) {
+          	transaction.remove(fragment);
+        }
+      	transaction.add(R.id.tab_content, mMainPageFragment, MAINPAGE_TAG);
+
+    }
+
+	```
+
 ## 五、 Communicating with Other Fragments
 
 1.  the fragment can access the Activity instance with ***getActivity()***；
@@ -94,11 +116,14 @@ fragmentTransaction.commit();
 
     	// Container Activity must implement this interface
     	public interface OnHeadlineSelectedListener {
+    	
         	public void onArticleSelected(int position);
+        	
     	}
 
     	@Override
     	public void onAttach(Activity activity) {
+    	
         	super.onAttach(activity);
         
         	// This makes sure that the container activity has implemented
@@ -109,6 +134,7 @@ fragmentTransaction.commit();
             	throw new ClassCastException(activity.toString()
                     + " must implement OnHeadlineSelectedListener");
         	}
+        	
     	}
     
     	...

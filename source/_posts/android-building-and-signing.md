@@ -122,8 +122,9 @@ android {
         }
         
     }
+}
     
-    dependencies {
+dependencies {
     // The 'compile' configuration tells Gradle to add the dependency to the
     // compilation classpath and include it in the final package.
 
@@ -135,9 +136,7 @@ android {
 
     // Local binary dependency
     compile fileTree(dir: 'libs', include: ['*.jar'])
-}
 
-dependencies {
     compile project(":lib")
     compile 'com.android.support:appcompat-v7:19.0.1'
     compile fileTree(dir: 'libs', include: ['*.jar'])
@@ -150,8 +149,8 @@ dependencies {
 To build each version of your app, the build system combines source code and resources from:
 
 	* src/main/ - the main source directory (the default configuration common to all variants)
-	* src/<buildType>/ - the source directory
-	* src/<productFlavor>/ - the source directory
+	* src/[buildType] - the source directory
+	* src/[productFlavor] - the source directory
 	
 	The build type and product flavor source directories are optional.    
 For projects that do not define any flavors, the build system uses the defaultConfig settings:
@@ -448,13 +447,11 @@ android {
         </manifest>
 		```
 
-***Note:***
-1. 5.0 API21 以前，是dalvik，默认单dex，会有64k reference limit问题；
-2. 5.0及以后，是aot，默认就支持多dex。
 
-4. Multi-dex局限性
+4. Multi-dex局限性，会有ANR，Crash等问题。
 
-会有ANR，Crash等问题。
+	1. 5.0 API21 以前，是dalvik，默认单dex，会有64k reference limit问题；
+	2. 5.0及以后，是aot，默认就支持多dex。
 
 5. 优化Multi-dex编译
 

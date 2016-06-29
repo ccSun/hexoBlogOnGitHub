@@ -49,7 +49,7 @@ AndroidManifest.xml中activity，generate Deep Link。实际上是添加intent-f
       android:mimeType="string" />
 ```
 匹配：mimeType或者uri，或者mimeType＋uri    
-\<scheme>://\<host>:\<port>[\<path>|\<pathPrefix>|\<pathPattern>]
+\[scheme]://\[host]:\[port]/[(path)|(pathPrefix)|(pathPattern)]
 
 *Note*    
 
