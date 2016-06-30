@@ -61,3 +61,4 @@ JVM的数据类型：
 参考文章    
 [java内存分配和String类型的深度解析](http://my.oschina.net/xiaohui249/blog/170013)    
 [JAVA虚拟机体系结构](http://www.cnblogs.com/java-my-life/archive/2012/08/01/2615221.html)
+[java字符串常量池知识](http://blog.sina.com.cn/s/blog_791db047010177w0.html)
