@@ -1,4 +1,4 @@
-title: JVM-Memory-Management
+title: Java-JVM-Memory-Management
 categories:
   - Java
 tags:
